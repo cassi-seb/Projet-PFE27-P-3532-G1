@@ -1,0 +1,430 @@
+{
+  "description": "Benchmark de 45 textes argumentatifs annotÃ©s pour l'Ã©valuation de l'assistant d'esprit critique (ModÃ¨le Gemma 2)",
+  "version": "2.0.0",
+  "splits": {
+    "dev": 30,
+    "test": 15
+  },
+  "textes": [
+    {
+      "id": "DEV-01",
+      "split": "dev",
+      "theme": "economie",
+      "orientation": "droite",
+      "texte": "Le chÃ´mage a augmentÃ© de 12% ce trimestre. Il faut supprimer immÃ©diatement l'impÃ´t sur les successions pour que les entrepreneurs arrÃªtent de fuir la France.",
+      "failles_logiques_attendues": ["Fausse causalitÃ©", "Non sequitur"],
+      "chiffres_cites": ["12%"]
+    },
+    {
+      "id": "DEV-02",
+      "split": "dev",
+      "theme": "economie",
+      "orientation": "gauche",
+      "texte": "Les 500 plus grandes fortunes ont doublÃ© leur patrimoine en cinq ans. Soit nous taxons Ã  90% les superprofits, soit notre modÃ¨le rÃ©publicain s'effondrera totalement l'an prochain.",
+      "failles_logiques_attendues": ["Faux dilemme", "Pente glissante"],
+      "chiffres_cites": ["90%"]
+    },
+    {
+      "id": "DEV-03",
+      "split": "dev",
+      "theme": "ecologie",
+      "orientation": "ecolo",
+      "texte": "Les scientifiques du GIEC le disent tous : si nous n'interdisons pas l'aviation commerciale sous deux ans, nos enfants vivront dans un dÃ©sert invivable dÃ¨s 2035.",
+      "failles_logiques_attendues": ["Appel Ã  la peur", "Pente glissante", "ExagÃ©ration"],
+      "chiffres_cites": ["deux ans", "2035"]
+    },
+    {
+      "id": "DEV-04",
+      "split": "dev",
+      "theme": "societe",
+      "orientation": "conservateur",
+      "texte": "Si on commence Ã  rÃ©former les programmes scolaires traditionnels, bientÃ´t les enfants n'apprendront mÃªme plus Ã  lire et l'Ã©cole ne servira plus Ã  rien.",
+      "failles_logiques_attendues": ["Pente glissante"],
+      "chiffres_cites": []
+    },
+    {
+      "id": "DEV-05",
+      "split": "dev",
+      "theme": "politique",
+      "orientation": "critique",
+      "texte": "Comment peut-on accorder le moindre crÃ©dit Ã  la politique budgÃ©taire du ministre ? Tout le monde sait qu'il n'a jamais gÃ©rÃ© une entreprise de sa vie.",
+      "failles_logiques_attendues": ["Attaque personnelle (Ad Hominem)"],
+      "chiffres_cites": []
+    },
+    {
+      "id": "DEV-06",
+      "split": "dev",
+      "theme": "technologie",
+      "orientation": "technophile",
+      "texte": "L'intelligence artificielle va crÃ©er des millions d'emplois hautement qualifiÃ©s. Ceux qui Ã©mettent des doutes sont simplement des technophobes rÃ©actionnaires dÃ©passÃ©s par l'Ã©poque.",
+      "failles_logiques_attendues": ["Attaque personnelle (Ad Hominem)", "Homme de paille"],
+      "chiffres_cites": []
+    },
+    {
+      "id": "DEV-07",
+      "split": "dev",
+      "theme": "sante",
+      "orientation": "sceptique",
+      "texte": "Mon grand-pÃ¨re a fumÃ© un paquet par jour pendant cinquante ans et a vÃ©cu jusqu'Ã  95 ans en pleine forme. Cela prouve bien que les alertes sur le tabac sont largement exagÃ©rÃ©es.",
+      "failles_logiques_attendues": ["GÃ©nÃ©ralisation hÃ¢tive", "Preuve anecdotique"],
+      "chiffres_cites": ["cinquante ans", "95 ans"]
+    },
+    {
+      "id": "DEV-08",
+      "split": "dev",
+      "theme": "economie",
+      "orientation": "liberal",
+      "texte": "Les pays qui ont privatisÃ© leurs services ferroviaires ont vu leur ponctualitÃ© grimper Ã  99%. Il faut vendre le rÃ©seau national dÃ¨s demain pour sauver nos trajets quotidiens.",
+      "failles_logiques_attendues": ["GÃ©nÃ©ralisation hÃ¢tive", "Chiffre non sourcÃ©"],
+      "chiffres_cites": ["99%"]
+    },
+    {
+      "id": "DEV-09",
+      "split": "dev",
+      "theme": "societe",
+      "orientation": "securite",
+      "texte": "La criminalitÃ© est en hausse constante partout. La seule solution restante est d'installer la reconnaissance faciale dans toutes les rues sans exception.",
+      "failles_logiques_attendues": ["Faux dilemme", "Affirmation sans nuance"],
+      "chiffres_cites": []
+    },
+    {
+      "id": "DEV-10",
+      "split": "dev",
+      "theme": "education",
+      "orientation": "reforme",
+      "texte": "Tous les pays scandinaves ont supprimÃ© les devoirs Ã  la maison et leurs Ã©lÃ¨ves sont les meilleurs du monde aux tests PISA. Faisons de mÃªme immÃ©diatement.",
+      "failles_logiques_attendues": ["Fausse causalitÃ©", "GÃ©nÃ©ralisation hÃ¢tive"],
+      "chiffres_cites": []
+    },
+    {
+      "id": "DEV-11",
+      "split": "dev",
+      "theme": "energie",
+      "orientation": "pro-nucleaire",
+      "texte": "Le nuclÃ©aire produit une Ã©lectricitÃ© 100% dÃ©carbonÃ©e. Ceux qui veulent fermer nos rÃ©acteurs veulent simplement nous renvoyer au Moyen Ã‚ge Ã  la lueur des bougies.",
+      "failles_logiques_attendues": ["Homme de paille", "Caricature"],
+      "chiffres_cites": ["100%"]
+    },
+    {
+      "id": "DEV-12",
+      "split": "dev",
+      "theme": "energie",
+      "orientation": "anti-nucleaire",
+      "texte": "Un accident nuclÃ©aire peut rayer un pays entier de la carte pour 10 000 ans. Aucun risque ne vaut la peine : dÃ©mantelons toutes les centrales dÃ¨s cette annÃ©e.",
+      "failles_logiques_attendues": ["Appel Ã  la peur", "Faux dilemme"],
+      "chiffres_cites": ["10 000 ans"]
+    },
+    {
+      "id": "DEV-13",
+      "split": "dev",
+      "theme": "urbanisme",
+      "orientation": "mobilite",
+      "texte": "Les voitures polluent et tuent en ville. Soit on bannit totalement les automobiles des centres urbains, soit on accepte d'empoisonner sciemment nos concitoyens.",
+      "failles_logiques_attendues": ["Faux dilemme", "Appel Ã  l'Ã©motion"],
+      "chiffres_cites": []
+    },
+    {
+      "id": "DEV-14",
+      "split": "dev",
+      "theme": "fiscalite",
+      "orientation": "pouvoir-achat",
+      "texte": "L'inflation alimentaire a dÃ©passÃ© 15% selon les associations de consommateurs. L'Ã‰tat doit bloquer tous les prix des supermarchÃ©s sans tarder.",
+      "failles_logiques_attendues": ["Non sequitur", "Chiffre Ã  vÃ©rifier"],
+      "chiffres_cites": ["15%"]
+    },
+    {
+      "id": "DEV-15",
+      "split": "dev",
+      "theme": "politique",
+      "orientation": "populaire",
+      "texte": "80% des FranÃ§ais sondÃ©s rÃ©clament le rÃ©tablissement de l'uniforme Ã  l'Ã©cole. DÃ¨s lors que la majoritÃ© le souhaite, cela prouve sans l'ombre d'un doute que c'est la meilleure mesure.",
+      "failles_logiques_attendues": ["Appel Ã  la popularitÃ© (Ad Populum)"],
+      "chiffres_cites": ["80%"]
+    },
+    {
+      "id": "DEV-16",
+      "split": "dev",
+      "theme": "numerique",
+      "orientation": "regulation",
+      "texte": "Les rÃ©seaux sociaux dÃ©truisent la concentration de nos adolescents. Si nous n'interdisons pas les Ã©crans aux moins de 16 ans, notre civilisation sera analphabÃ¨te en 2040.",
+      "failles_logiques_attendues": ["Pente glissante", "ExagÃ©ration"],
+      "chiffres_cites": ["16 ans", "2040"]
+    },
+    {
+      "id": "DEV-17",
+      "split": "dev",
+      "theme": "travail",
+      "orientation": "semaine-4-jours",
+      "texte": "Les entreprises qui ont testÃ© la semaine de 4 jours ont vu leur productivitÃ© bondir de 35% et leurs congÃ©s maladie baisser de moitiÃ©. Cette formule doit devenir la loi pour tous les secteurs.",
+      "failles_logiques_attendues": ["GÃ©nÃ©ralisation hÃ¢tive"],
+      "chiffres_cites": ["35%"]
+    },
+    {
+      "id": "DEV-18",
+      "split": "dev",
+      "theme": "travail",
+      "orientation": "competitivite",
+      "texte": "La France est le pays d'Europe oÃ¹ l'on travaille le moins d'heures par an. Si on ne repasse pas aux 39 heures sans hausse de salaire, notre PIB va chuter de 10% l'an prochain.",
+      "failles_logiques_attendues": ["Pente glissante", "Affirmation numÃ©rique non prouvÃ©e"],
+      "chiffres_cites": ["39 heures", "10%"]
+    },
+    {
+      "id": "DEV-19",
+      "split": "dev",
+      "theme": "ecologie",
+      "orientation": "agriculture",
+      "texte": "L'agriculture biologique est le seul modÃ¨le d'avenir. Les partisans de l'agriculture conventionnelle sont rÃ©munÃ©rÃ©s par les lobbies phytosanitaires pour nous empoisonner.",
+      "failles_logiques_attendues": ["Attaque personnelle (Ad Hominem)", "ProcÃ¨s d'intention"],
+      "chiffres_cites": []
+    },
+    {
+      "id": "DEV-20",
+      "split": "dev",
+      "theme": "ecologie",
+      "orientation": "productivisme",
+      "texte": "Si nous rÃ©duisons les pesticides de 50%, la production agricole chutera immÃ©diatement et la France connaÃ®tra des pÃ©nuries alimentaires dignes des temps de guerre.",
+      "failles_logiques_attendues": ["Pente glissante", "Appel Ã  la peur"],
+      "chiffres_cites": ["50%"]
+    },
+    {
+      "id": "DEV-21",
+      "split": "dev",
+      "theme": "logement",
+      "orientation": "encadrement",
+      "texte": "Les loyers parisiens ont bondi de 40% en une dÃ©cennie. Les propriÃ©taires qui refusent l'encadrement des loyers sont des spÃ©culateurs sans scrupule.",
+      "failles_logiques_attendues": ["Attaque personnelle", "GÃ©nÃ©ralisation"],
+      "chiffres_cites": ["40%"]
+    },
+    {
+      "id": "DEV-22",
+      "split": "dev",
+      "theme": "logement",
+      "orientation": "proprietaires",
+      "texte": "Encadrer les loyers entraÃ®ne inÃ©vitablement l'arrÃªt total des constructions neuves et la faillite des artisans du bÃ¢timent. Il faut libÃ©rer totalement le marchÃ©.",
+      "failles_logiques_attendues": ["Pente glissante", "Faux dilemme"],
+      "chiffres_cites": []
+    },
+    {
+      "id": "DEV-23",
+      "split": "dev",
+      "theme": "sante",
+      "orientation": "urgences",
+      "texte": "Les urgences hospitaliÃ¨res sont saturÃ©es Ã  120%. Le systÃ¨me de santÃ© publique est dÃ©finitivement mort, seule la privatisation gÃ©nÃ©rale permettra de soigner les gens dignement.",
+      "failles_logiques_attendues": ["Faux dilemme", "Non sequitur"],
+      "chiffres_cites": ["120%"]
+    },
+    {
+      "id": "DEV-24",
+      "split": "dev",
+      "theme": "justice",
+      "orientation": "fermete",
+      "texte": "Les peines de prison avec sursis ne dissuadent personne. La preuve : les chiffres de la rÃ©cidive n'ont jamais Ã©tÃ© aussi Ã©levÃ©s selon un rapport de police.",
+      "failles_logiques_attendues": ["Affirmation sans source prÃ©cise", "GÃ©nÃ©ralisation"],
+      "chiffres_cites": []
+    },
+    {
+      "id": "DEV-25",
+      "split": "dev",
+      "theme": "justice",
+      "orientation": "reinsertion",
+      "texte": "La prison est une fabrique de rÃ©cidivistes qui coÃ»te 100 euros par jour et par dÃ©tenu. Supprimons les peines d'incarcÃ©ration pour les dÃ©lits non violents dÃ¨s demain.",
+      "failles_logiques_attendues": ["GÃ©nÃ©ralisation hÃ¢tive"],
+      "chiffres_cites": ["100 euros"]
+    },
+    {
+      "id": "DEV-26",
+      "split": "dev",
+      "theme": "culture",
+      "orientation": "patrimoine",
+      "texte": "Le budget allouÃ© Ã  la culture est une dÃ©pense inutile en temps de crise budgÃ©taire. Nos ancÃªtres ont bÃ¢ti des cathÃ©drales sans aucune subvention publique.",
+      "failles_logiques_attendues": ["Fausse analogie historique", "Anachronisme"],
+      "chiffres_cites": []
+    },
+    {
+      "id": "DEV-27",
+      "split": "dev",
+      "theme": "culture",
+      "orientation": "creation",
+      "texte": "Chaque euro investi dans le spectacle vivant rapporte 5 euros Ã  l'Ã©conomie locale. Couper les subventions culturelles, c'est ruiner sciemment nos commerces de centre-ville.",
+      "failles_logiques_attendues": ["Chiffre multiplicateur non contextualisÃ©", "Pente glissante"],
+      "chiffres_cites": ["1 euro", "5 euros"]
+    },
+    {
+      "id": "DEV-28",
+      "split": "dev",
+      "theme": "transports",
+      "orientation": "ferroviaire",
+      "texte": "Le train Ã©met 50 fois moins de CO2 que la voiture. Rendre les trains entiÃ¨rement gratuits permettra de diviser par deux les Ã©missions de transport en France dÃ¨s la premiÃ¨re annÃ©e.",
+      "failles_logiques_attendues": ["Saut logique", "PrÃ©diction sans justification"],
+      "chiffres_cites": ["50 fois"]
+    },
+    {
+      "id": "DEV-29",
+      "split": "dev",
+      "theme": "democratie",
+      "orientation": "referendum",
+      "texte": "Le peuple doit dÃ©cider de chaque loi par rÃ©fÃ©rendum numÃ©rique direct. Les dÃ©putÃ©s actuels ne servent qu'Ã  trahir la volontÃ© populaire.",
+      "failles_logiques_attendues": ["ProcÃ¨s d'intention", "Faux dilemme"],
+      "chiffres_cites": []
+    },
+    {
+      "id": "DEV-30",
+      "split": "dev",
+      "theme": "democratie",
+      "orientation": "representative",
+      "texte": "Faire voter les citoyens sur des sujets Ã©conomiques complexes conduirait immanquablement au dÃ©sastre financier. La dÃ©mocratie directe est le rÃ¨gne de l'incompÃ©tence.",
+      "failles_logiques_attendues": ["Pente glissante", "MÃ©pris de classe / Ad Hominem"],
+      "chiffres_cites": []
+    },
+
+    {
+      "id": "TEST-01",
+      "split": "test",
+      "theme": "dette_publique",
+      "orientation": "droite",
+      "paire_miroir_id": "TEST-02",
+      "texte": "La dette publique franÃ§aise a dÃ©passÃ© 110% du PIB. Continuer Ã  dÃ©penser sans compter mÃ¨nera le pays Ã  la faillite comme la GrÃ¨ce en 2010. Il est impÃ©ratif de geler les retraites et de rÃ©duire la masse salariale des fonctionnaires.",
+      "failles_logiques_attendues": ["Fausse analogie", "Pente glissante"],
+      "chiffres_cites": ["110%", "2010"]
+    },
+    {
+      "id": "TEST-02",
+      "split": "test",
+      "theme": "dette_publique",
+      "orientation": "gauche",
+      "paire_miroir_id": "TEST-01",
+      "texte": "La dette publique Ã  110% du PIB est un faux Ã©pouvantail brandi par les financiers. L'Ã‰tat s'endette pour investir dans l'avenir. Imposer l'austÃ©ritÃ© budgÃ©taire dÃ©truira nos services publics et paupÃ©risera des millions de travailleurs.",
+      "failles_logiques_attendues": ["ProcÃ¨s d'intention", "Pente glissante"],
+      "chiffres_cites": ["110%"]
+    },
+    {
+      "id": "TEST-03",
+      "split": "test",
+      "theme": "immigration_economie",
+      "orientation": "droite",
+      "paire_miroir_id": "TEST-04",
+      "texte": "L'immigration de masse coÃ»te chaque annÃ©e plus de 40 milliards d'euros Ã  la France en prestations sociales. Si nous ne fermons pas nos frontiÃ¨res, notre systÃ¨me de protection sociale s'effondrera d'ici 2030.",
+      "failles_logiques_attendues": ["Chiffre non sourcÃ©", "Pente glissante", "Faux dilemme"],
+      "chiffres_cites": ["40 milliards", "2030"]
+    },
+    {
+      "id": "TEST-04",
+      "split": "test",
+      "theme": "immigration_economie",
+      "orientation": "gauche",
+      "paire_miroir_id": "TEST-03",
+      "texte": "Les immigrÃ©s cotisent davantage aux caisses de retraite qu'ils ne perÃ§oivent de prestations, rapportant un solde positif de 12 milliards d'euros. Ceux qui veulent restreindre l'accueil des rÃ©fugiÃ©s sont animÃ©s par la xÃ©nophobie et l'ignorance Ã©conomique.",
+      "failles_logiques_attendues": ["Attaque personnelle (Ad Hominem)", "GÃ©nÃ©ralisation"],
+      "chiffres_cites": ["12 milliards"]
+    },
+    {
+      "id": "TEST-05",
+      "split": "test",
+      "theme": "transition_energie",
+      "orientation": "pro-eolien",
+      "paire_miroir_id": "TEST-06",
+      "texte": "Le coÃ»t de production du MWh Ã©olien a chutÃ© de 60% en dix ans. Seuls les rÃ©trogrades attachÃ©s aux Ã©nergies fossiles refusent l'implantation des Ã©oliennes terrestres en France.",
+      "failles_logiques_attendues": ["Attaque personnelle", "Caricature"],
+      "chiffres_cites": ["60%"]
+    },
+    {
+      "id": "TEST-06",
+      "split": "test",
+      "theme": "transition_energie",
+      "orientation": "anti-eolien",
+      "paire_miroir_id": "TEST-05",
+      "texte": "Les Ã©oliennes massacrent la biodiversitÃ© et dÃ©figurent nos paysages pour un rendement intermittent infÃ©rieur Ã  25%. Les promoteurs du vent s'enrichissent sur le dos des contribuables franÃ§ais.",
+      "failles_logiques_attendues": ["Appel Ã  l'Ã©motion", "ProcÃ¨s d'intention"],
+      "chiffres_cites": ["25%"]
+    },
+    {
+      "id": "TEST-07",
+      "split": "test",
+      "theme": "reforme_retraites",
+      "orientation": "recul_age",
+      "paire_miroir_id": "TEST-08",
+      "texte": "L'espÃ©rance de vie atteint 85 ans. Maintenir l'Ã¢ge lÃ©gal Ã  62 ans condamne les rÃ©gimes de retraite Ã  un dÃ©ficit de 15 milliards par an. Soit on travaille deux ans de plus, soit on baisse les pensions de tout le monde.",
+      "failles_logiques_attendues": ["Faux dilemme"],
+      "chiffres_cites": ["85 ans", "62 ans", "15 milliards", "deux ans"]
+    },
+    {
+      "id": "TEST-08",
+      "split": "test",
+      "theme": "reforme_retraites",
+      "orientation": "retraite_60",
+      "paire_miroir_id": "TEST-07",
+      "texte": "Repousser l'Ã¢ge de dÃ©part Ã  64 ans est un vol de deux annÃ©es de vie infligÃ© aux ouvriers qui meurent avant 65 ans. Les partisans de la rÃ©forme veulent uniquement financer des cadeaux fiscaux aux multinationales.",
+      "failles_logiques_attendues": ["Appel Ã  l'Ã©motion", "ProcÃ¨s d'intention", "Caricature"],
+      "chiffres_cites": ["64 ans", "deux annÃ©es", "65 ans"]
+    },
+    {
+      "id": "TEST-09",
+      "split": "test",
+      "theme": "salaire_minimum",
+      "orientation": "hausse_smic",
+      "paire_miroir_id": "TEST-10",
+      "texte": "Le SMIC actuel ne permet plus de vivre dÃ©cemment face Ã  une hausse des prix de 8%. Augmenter le SMIC Ã  1600 euros net relancera la consommation populaire et ne dÃ©truira aucun emploi sÃ©rieux.",
+      "failles_logiques_attendues": ["Affirmation sans preuve macro-Ã©conomique"],
+      "chiffres_cites": ["8%", "1600 euros"]
+    },
+    {
+      "id": "TEST-10",
+      "split": "test",
+      "theme": "salaire_minimum",
+      "orientation": "gel_smic",
+      "paire_miroir_id": "TEST-09",
+      "texte": "Hausser artificiellement le SMIC de 10% provoquera immÃ©diatement une vague de licenciements massifs et la fermeture de 30 000 petites entreprises en France. C'est une mesure purement dÃ©magogique.",
+      "failles_logiques_attendues": ["Pente glissante", "Attaque personnelle (dÃ©magogie)"],
+      "chiffres_cites": ["10%", "30 000"]
+    },
+    {
+      "id": "TEST-11",
+      "split": "test",
+      "theme": "ia_emploi",
+      "orientation": "optimiste",
+      "paire_miroir_id": "TEST-12",
+      "texte": "Une Ã©tude de Stanford montre que les assistants gÃ©nÃ©ratifs augmentent la productivitÃ© de 14%. L'IA ne dÃ©truira pas d'emplois, elle Ã©liminera seulement les tÃ¢ches rÃ©pÃ©titives et ennuyeuses.",
+      "failles_logiques_attendues": ["GÃ©nÃ©ralisation hÃ¢tive"],
+      "chiffres_cites": ["14%"]
+    },
+    {
+      "id": "TEST-12",
+      "split": "test",
+      "theme": "ia_emploi",
+      "orientation": "pessimiste",
+      "paire_miroir_id": "TEST-11",
+      "texte": "L'automatisation par l'IA menace 300 millions d'emplois dans le monde selon Goldman Sachs. Si nous ne votons pas un moratoire immÃ©diat, la moitiÃ© des diplÃ´mÃ©s de notre universitÃ© seront au chÃ´mage en 2028.",
+      "failles_logiques_attendues": ["Pente glissante", "Appel Ã  la peur"],
+      "chiffres_cites": ["300 millions", "2028"]
+    },
+    {
+      "id": "TEST-13",
+      "split": "test",
+      "theme": "securite_routiere",
+      "orientation": "vitesse_80",
+      "texte": "Le passage Ã  80 km/h sur les routes secondaires a sauvÃ© plus de 350 vies en deux ans selon le bilan officiel. Ceux qui contestent cette limitation prÃ©fÃ¨rent la vitesse Ã  la vie humaine.",
+      "failles_logiques_attendues": ["Faux dilemme moral", "Attaque personnelle"],
+      "chiffres_cites": ["80 km/h", "350 vies", "deux ans"]
+    },
+    {
+      "id": "TEST-14",
+      "split": "test",
+      "theme": "alimentation",
+      "orientation": "taxe_soda",
+      "texte": "L'obÃ©sitÃ© touche 17% des adultes en France et coÃ»te des milliards Ã  l'Assurance maladie. Taxer Ã  50% les boissons sucrÃ©es est la seule maniÃ¨re d'Ã©radiquer ce flÃ©au national.",
+      "failles_logiques_attendues": ["Faux dilemme", "Non sequitur"],
+      "chiffres_cites": ["17%", "50%"]
+    },
+    {
+      "id": "TEST-15",
+      "split": "test",
+      "theme": "fiscalite_entreprises",
+      "orientation": "baisse_impots",
+      "texte": "La France affiche un taux de prÃ©lÃ¨vements obligatoires record de 45% du PIB. Tout impÃ´t supplÃ©mentaire fera fuir les derniers investisseurs Ã©trangers vers des pays voisins plus accueillants.",
+      "failles_logiques_attendues": ["Pente glissante", "Affirmation pÃ©remptoire"],
+      "chiffres_cites": ["45%"]
+    }
+  ]
+}
+
+

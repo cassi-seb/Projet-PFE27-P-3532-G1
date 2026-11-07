@@ -1,6 +1,6 @@
 ECE ING5 · PFE 2026-2027
 
-Assistant Pédagogique — Esprit Critique & Sophismes
+Assistant Pédagogique — Esprit Critique & Failles logiques
 
 Soutenance Intermédiaire · J2
 
@@ -44,7 +44,7 @@ Les étudiants identifient intuitivement qu'un argument « ne semble pas juste �
 
 H2
 
-Nommer un sophisme (« c'est une corrélation confondue avec la causalité ») est plus mémorable qu'une simple réfutation.
+Nommer un faille logique (« c'est une corrélation confondue avec la causalité ») est plus mémorable qu'une simple réfutation.
 
 H3
 
@@ -60,13 +60,13 @@ Les étudiants font confiance aux réponses d'un assistant IA sans chercher à v
 
 ## La question à laquelle le projet répondra
 
-Dans quelle mesure un assistant LLM à réponse structurée aide-t-il des étudiants à nommer correctement les sophismes formels, comparé à une réponse libre, sur un corpus de cas canoniques ?
+Dans quelle mesure un assistant LLM à réponse structurée aide-t-il des étudiants à nommer correctement les failles logiques formels, comparé à une réponse libre, sur un corpus de cas canoniques ?
 
-**Pourquoi cette formulation est testable :** le corpus de cas canoniques (exemples dont le sophisme de référence est établi et non ambigu) permet de comparer mécaniquement la réponse obtenue à la réponse attendue. La comparaison *baseline* (prompt libre) vs *structured* (sortie JSON contrainte) mesure l'apport du format. La relecture humaine sur un échantillon juge l'exactitude et la valeur pédagogique.
+**Pourquoi cette formulation est testable :** le corpus de cas canoniques (exemples dont le faille logique de référence est établi et non ambigu) permet de comparer mécaniquement la réponse obtenue à la réponse attendue. La comparaison *baseline* (prompt libre) vs *structured* (sortie JSON contrainte) mesure l'apport du format. La relecture humaine sur un échantillon juge l'exactitude et la valeur pédagogique.
 
 **Ce qu'elle n'est pas :** la problématique ne demande pas si l'assistant « sait » si une affirmation est vraie ou fausse. Elle demande s'il peut décoder la *mécanique argumentative* d'un texte. Ces deux questions sont distinctes et la seconde est celle que les outils existants ne traitent pas.
 
-**Périmètre :** sophismes formels classiques, liste fermée (\~15 types), exemples fabriqués ou canoniques documentés. Hors périmètre : analyse de vrais discours politiques non annotés, vérification factuelle.
+**Périmètre :** failles logiques formels classiques, liste fermée (\~15 types), exemples fabriqués ou canoniques documentés. Hors périmètre : analyse de vrais discours politiques non annotés, vérification factuelle.
 
 Ad hominem Pente glissante Homme de paille Faux dilemme Appel à l'autorité Corrélation ≠ causalité Ad populum Généralisation hâtive Whataboutism Cherry picking Fausse analogie Appel aux émotions Pétition de principe Ad ignorantiam Nirvana fallacy
 
@@ -84,13 +84,13 @@ ClaimBuster
 
 Modèle NLP (KDD 2017) qui classe les phrases selon leur « mérite à être vérifiées ». Entraîné sur des débats électoraux américains.
 
-Juge l'importance de vérifier, pas la structure de l'argument. Ne détecte pas les sophismes. \[8\]
+Juge l'importance de vérifier, pas la structure de l'argument. Ne détecte pas les failles logiques. \[8\]
 
 Full Fact AI
 
 Utilisé par +40 organisations dans 30 pays. Classe les affirmations par priorité et cherche des correspondances dans une base de vérifications existantes.
 
-Opère sur des claims factuels. Aucun composant d'analyse rhétorique ou de détection de sophisme. \[9\]
+Opère sur des claims factuels. Aucun composant d'analyse rhétorique ou de détection de faille logique. \[9\]
 
 NewsGuard
 
@@ -116,20 +116,20 @@ IBM Project Debater
 
 Système IA capable de débattre oralement sur des sujets complexes. Entraîné sur 400M d'articles. Prix Nature 2021.
 
-Génère des arguments, ne détecte pas les sophismes. Usage expérimental, non pédagogique. \[13\]
+Génère des arguments, ne détecte pas les failles logiques. Usage expérimental, non pédagogique. \[13\]
 
-### C. Recherche en détection automatique de sophismes
+### C. Recherche en détection automatique de failles logiques
 
-La détection automatique des sophismes est un domaine de recherche actif mais difficile. Les résultats récents montrent que les LLMs peinent sans structure imposée :
+La détection automatique des failles logiques est un domaine de recherche actif mais difficile. Les résultats récents montrent que les LLMs peinent sans structure imposée :
 
 | Travail | Contribution | Résultat clé |
 | --- | --- | --- |
-| Jin et al., EMNLP 2022 \[14\] | Dataset Logic + LogicClimate. Benchmark de détection de sophismes. | Un classifieur structuré bat le meilleur LLM de +5,46 F1. Les LLMs sans structure échouent. |
+| Jin et al., EMNLP 2022 \[14\] | Dataset Logic + LogicClimate. Benchmark de détection de failles logiques. | Un classifieur structuré bat le meilleur LLM de +5,46 F1. Les LLMs sans structure échouent. |
 | Helwe et al. (MAFALDA), NAACL 2024 \[15\] | Fusion de datasets, taxonomie unifiée, annotations expertes avec explications. | Benchmark de référence pour l'évaluation. Montre que la subjectivité est le principal obstacle à la mesure. |
 | Li et al., arXiv 2025 \[16\] | Survey LLMs en argumentation mining. | LLMs sur-prédisent les arguments dans les textes émotionnels. Fiabilité LLM-as-judge discutée. |
-| Habernal et al., EMNLP 2017 \[17\] | Serious game Argotario pour collecter des exemples de sophismes. | 5 types de sophismes collectés. Montre la viabilité d'une approche par exemples canoniques. |
+| Habernal et al., EMNLP 2017 \[17\] | Serious game Argotario pour collecter des exemples de failles logiques. | 5 types de failles logiques collectés. Montre la viabilité d'une approche par exemples canoniques. |
 
-**Leçon directe pour notre projet :** les cas non ambigus (sophismes canoniques avec un seul label correct) sont mesurables. Les cas nuancés ne le sont pas. Notre corpus doit rester dans la première catégorie.
+**Leçon directe pour notre projet :** les cas non ambigus (failles logiques canoniques avec un seul label correct) sont mesurables. Les cas nuancés ne le sont pas. Notre corpus doit rester dans la première catégorie.
 
 ### D. Approches pédagogiques : prebunking et lecture latérale
 
@@ -151,7 +151,7 @@ Lateral Reading (Stanford, 2017)
 
 Les fact-checkers experts quittent le site pour vérifier ailleurs. Contrairement aux historiens et étudiants, ils ne s'arrêtent pas à l'apparence de la source.
 
-Wineburg & McGrew \[19\]. Compétence enseignable, mais distincte de l'analyse de sophismes.
+Wineburg & McGrew \[19\]. Compétence enseignable, mais distincte de l'analyse de failles logiques.
 
 ---
 
@@ -161,7 +161,7 @@ Wineburg & McGrew \[19\]. Compétence enseignable, mais distincte de l'analyse d
 
 Matrice de positionnement
 
-| Outil | Vérifie les faits | Analyse la structure | Nomme le sophisme | Pédagogique | Évaluable |
+| Outil | Vérifie les faits | Analyse la structure | Nomme le faille logique | Pédagogique | Évaluable |
 | --- | --- | --- | --- | --- | --- |
 | ClaimBuster / Full Fact | ✓ | ✗ | ✗ | ✗ | partiel |
 | Kialo / Argdown | ✗ | ✓ (manuel) | ✗ | partiel | ✗ |
@@ -171,7 +171,7 @@ Matrice de positionnement
 
 Notre approche s'inscrit dans la logique du **prebunking** (inoculation) : plutôt que de dire « cette affirmation est fausse », l'assistant enseigne *quel mécanisme rhétorique est à l'œuvre et pourquoi il peut induire en erreur*. Cette posture est cohérente avec les résultats de van der Linden et al. \[6\] et avec l'absence d'outil pédagogique structuré dans cet espace.
 
-Le verrou que nous levons est **l'évaluabilité** : en limitant le périmètre aux sophismes canoniques (liste fermée, exemples fabriqués), nous obtenons une ground truth non ambiguë qui rend la comparaison baseline/structured reproductible et la notation humaine fiable.
+Le verrou que nous levons est **l'évaluabilité** : en limitant le périmètre aux failles logiques canoniques (liste fermée, exemples fabriqués), nous obtenons une ground truth non ambiguë qui rend la comparaison baseline/structured reproductible et la notation humaine fiable.
 
 ---
 
@@ -179,11 +179,11 @@ Le verrou que nous levons est **l'évaluabilité** : en limitant le périmètre 
 
 ## Ce que nous allons construire en Phase 3
 
-Notre Prototype Fonctionnel est un **assistant pédagogique de détection de sophismes** : l'utilisateur soumet un argument en texte libre, l'assistant identifie le type de sophisme, déconstruit son mécanisme, et fournit un exemple contre-factuel. La réponse est structurée en 4 blocs fixes, ce qui permet une évaluation objective et reproductible.
+Notre Prototype Fonctionnel est un **assistant pédagogique de détection de failles logiques** : l'utilisateur soumet un argument en texte libre, l'assistant identifie le type de faille logique, déconstruit son mécanisme, et fournit un exemple contre-factuel. La réponse est structurée en 4 blocs fixes, ce qui permet une évaluation objective et reproductible.
 
-En deux phrases : l'utilisateur colle un argument. L'assistant répond avec (1) le nom du sophisme, (2) pourquoi il est trompeur, (3) un exemple similaire, (4) comment le détecter soi-même — en s'appuyant sur une liste fermée de 15 types.
+En deux phrases : l'utilisateur colle un argument. L'assistant répond avec (1) le nom du faille logique, (2) pourquoi il est trompeur, (3) un exemple similaire, (4) comment le détecter soi-même — en s'appuyant sur une liste fermée de 15 types.
 
-**La fonctionnalité la plus risquée** — et donc celle sur laquelle se concentre le prototype — est la *cohérence de la classification* : un LLM avec prompt structuré nomme-t-il le bon sophisme de façon reproductible sur un corpus annoté, mieux qu'un prompt libre ? C'est la question que notre pipeline d'évaluation (runner baseline/structured + CSV de résultats) est conçu pour trancher avant la soutenance finale.
+**La fonctionnalité la plus risquée** — et donc celle sur laquelle se concentre le prototype — est la *cohérence de la classification* : un LLM avec prompt structuré nomme-t-il le bon faille logique de façon reproductible sur un corpus annoté, mieux qu'un prompt libre ? C'est la question que notre pipeline d'évaluation (runner baseline/structured + CSV de résultats) est conçu pour trancher avant la soutenance finale.
 
 **Ce que nous ne ferons pas dans cette version :** vérification factuelle des affirmations, analyse de vrais discours non annotés, fine-tuning de modèle. Ces choix libèrent du temps pour soigner ce qui compte : la qualité du corpus et la rigueur du protocole d'évaluation.
 
@@ -191,13 +191,13 @@ En deux phrases : l'utilisateur colle un argument. L'assistant répond avec (1) 
 
 | Priorité | Fonctionnalité | Justification |
 | --- | --- | --- |
-| Must | Prompt structuré forçant la classification parmi une liste fermée de 15 sophismes | C'est l'hypothèse centrale à tester. Sans liste fermée, l'évaluation automatique est impossible. |
+| Must | Prompt structuré forçant la classification parmi une liste fermée de 15 failles logiques | C'est l'hypothèse centrale à tester. Sans liste fermée, l'évaluation automatique est impossible. |
 | Must | Format de sortie 4 blocs : Reformulation → Mécanisme → Exemple → Vérification | Chaque bloc est scorable indépendamment. Condition nécessaire à la comparaison baseline/structured. |
 | Must | Corpus d'évaluation (≥ 30 cas canoniques annotés avec label de référence) | Sans ground truth, rien n'est mesurable. La qualité du corpus détermine la validité des résultats. |
 | Must | Pipeline de comparaison baseline vs structured avec export CSV | Requis par le guide de projet. Permet une évaluation reproductible et partageable avec le coach. |
 | Should | Interface Gradio (entrée texte libre + affichage des 4 blocs) | Nécessaire pour les tests utilisateurs en Phase 3. Peut fonctionner en local dans un premier temps. |
-| Should | ≥ 3 cas par type de sophisme dans le corpus (couverture équilibrée) | Évite que les résultats soient dominés par 2–3 types surreprésentés. Faisable avec `generate_questions.py`. |
-| Could | Mode entraînement : l'utilisateur devine le sophisme avant de voir la réponse | Renforce le prebunking actif (apprentissage par prédiction). Dépend du temps disponible après les Must. |
+| Should | ≥ 3 cas par type de faille logique dans le corpus (couverture équilibrée) | Évite que les résultats soient dominés par 2–3 types surreprésentés. Faisable avec `generate_questions.py`. |
+| Could | Mode entraînement : l'utilisateur devine le faille logique avant de voir la réponse | Renforce le prebunking actif (apprentissage par prédiction). Dépend du temps disponible après les Must. |
 | Could | Déploiement public sur Hugging Face Spaces | Utile pour le recrutement de testeurs. Non critique pour valider l'hypothèse principale. |
 | Won't | Vérification factuelle des affirmations | Hors périmètre : nous analysons la mécanique argumentative, pas la vérité des faits. Confondre les deux affaiblit le concept. |
 | Won't | Analyse de vrais discours politiques non annotés | Les cas ambigus rendent l'évaluation subjective. La validité du prototype repose sur des cas canoniques. |
@@ -229,7 +229,7 @@ Oui
 
 **Groq — Llama-3.3-70B ✓ Retenu** Gratuit · API OpenAI-compatible · 70B · latence \< 2 s · Together AI disponible en fallback
 
-**Hypothèse résiduelle à valider en Phase 3 :** Llama-3.3-70B sans fine-tuning atteint une précision ≥ 65 % sur la liste fermée avec prompt structuré. Pivot si non : réduire à 8 sophismes les plus distincts, ou basculer sur GPT-4o-mini (\< 5 € pour 1 000 évaluations).
+**Hypothèse résiduelle à valider en Phase 3 :** Llama-3.3-70B sans fine-tuning atteint une précision ≥ 65 % sur la liste fermée avec prompt structuré. Pivot si non : réduire à 8 failles logiques les plus distincts, ou basculer sur GPT-4o-mini (\< 5 € pour 1 000 évaluations).
 
 ### Arbre de choix n°2 — Stratégie de prompt
 
@@ -249,8 +249,8 @@ Trois approches comparées sur le critère clé : *la sortie est-elle évaluable
 
 | Risque | Probabilité | Impact | Plan de mitigation |
 | --- | --- | --- | --- |
-| **Ambiguïté des labels** — Un même argument peut relever de plusieurs sophismes selon l'interprétation (ex : ad hominem vs whataboutism). | Forte | Fort | Restreindre le corpus à des cas canoniques fabriqués, non ambigus. Rédiger un guide d'annotation avant toute notation. Mesurer l'accord inter-annotateurs (κ) sur 10 % du corpus. |
-| **Performances LLM insuffisantes** — Le modèle nomme systématiquement le mauvais sophisme même avec un prompt structuré. | Moyenne | Fort | Évaluer sur le dev set en semaine 1 de Phase 3. Pivot 1 : réduire à 8 types les plus distincts. Pivot 2 : passer à GPT-4o-mini (\< 5 € pour 1 000 évals). Le runner est agnostique au modèle (`--model` flag). |
+| **Ambiguïté des labels** — Un même argument peut relever de plusieurs failles logiques selon l'interprétation (ex : ad hominem vs whataboutism). | Forte | Fort | Restreindre le corpus à des cas canoniques fabriqués, non ambigus. Rédiger un guide d'annotation avant toute notation. Mesurer l'accord inter-annotateurs (κ) sur 10 % du corpus. |
+| **Performances LLM insuffisantes** — Le modèle nomme systématiquement le mauvais faille logique même avec un prompt structuré. | Moyenne | Fort | Évaluer sur le dev set en semaine 1 de Phase 3. Pivot 1 : réduire à 8 types les plus distincts. Pivot 2 : passer à GPT-4o-mini (\< 5 € pour 1 000 évals). Le runner est agnostique au modèle (`--model` flag). |
 | **Dépendance API Groq** — L'API gratuite devient payante, subit un rate limit bloquant, ou est indisponible en période de pic. | Faible | Fort | L'adaptateur `ChatCompletionsClient` est agnostique au fournisseur. Basculer sur Together AI ou Ollama local sans modifier le code (`--provider` flag). |
 | **Corpus trop petit** — Avec 30 cas dev, un écart de 5 % représente 1–2 cas : statistiquement non significatif. | Moyenne | Moyen | Utiliser `generate_questions.py` pour atteindre 50+ cas (≥ 3 exemples / type). Chaque membre valide un batch de 10 questions en parallèle. |
 | **Désaccord inter-annotateurs** — Les membres de l'équipe ne scorent pas de la même façon la qualité pédagogique d'une réponse. | Forte | Moyen | Rédiger un guide de scoring humain avec exemples calibrés (0 / 1 / 2 par bloc) avant tout scoring. Cross-noter 10 % du corpus à 2 personnes et calculer l'accord avant de valider. |
