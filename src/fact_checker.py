@@ -1,8 +1,8 @@
 """
 Module de vérification déterministe des données chiffrées (Fact-Checking Statistique Ouvert).
 Conforme à l'Objectif O5 du PFE :
-- 100% des valeurs de référence proviennent d'API officielles ouvertes (Banque mondiale, Insee, Eurostat).
-- AUCUN chiffre de référence n'est inventé ou halluciné par le LLM.
+- 100% des valeurs de référence proviennent d'organismes officiels (Banque Mondiale, Insee, Eurostat).
+- Explications claires, simples et accessibles au grand public.
 """
 
 import re
@@ -14,43 +14,48 @@ from typing import Dict, Any, List, Optional
 INDICATORS_MAP = {
     "chomage": {
         "code": "SL.UEM.TOTL.ZS",
-        "label": "Taux de chômage (% de la population active)",
-        "source": "Banque Mondiale / OIT / Insee",
+        "label": "Taux de chômage en France",
+        "unite": "%",
+        "source": "Banque Mondiale & Insee",
         "keywords": ["chômage", "chomeur", "chômeur", "chomeurs", "chômeurs", "sans-emploi"]
     },
     "inflation": {
         "code": "FP.CPI.TOTL.ZG",
-        "label": "Inflation, prix à la consommation (% annuel)",
-        "source": "Banque Mondiale / Insee",
+        "label": "Inflation annuelle en France (prix à la consommation)",
+        "unite": "%",
+        "source": "Banque Mondiale & Insee",
         "keywords": ["inflation", "hausse des prix", "prix à la consommation", "coût de la vie"]
     },
     "pib_croissance": {
         "code": "NY.GDP.MKTP.KD.ZG",
-        "label": "Croissance annuelle du PIB (%)",
-        "source": "Banque Mondiale / Eurostat / Insee",
+        "label": "Croissance annuelle du PIB en France",
+        "unite": "%",
+        "source": "Banque Mondiale & Eurostat",
         "keywords": ["pib", "croissance", "produit intérieur brut"]
     },
     "dette_publique": {
         "code": "GC.DOD.TOTL.GD.ZS",
         "label": "Dette publique brute (% du PIB)",
-        "source": "Banque Mondiale / Eurostat / Insee",
+        "unite": "% du PIB",
+        "source": "Banque Mondiale & Eurostat / Insee",
         "keywords": ["dette", "dette publique", "endettement", "déficit public"]
     },
     "population": {
         "code": "SP.POP.TOTL",
-        "label": "Population totale",
-        "source": "Banque Mondiale / Insee",
+        "label": "Population totale en France",
+        "unite": "millions d'habitants",
+        "source": "Banque Mondiale & Insee",
         "keywords": ["population", "habitants", "français", "démographie"]
     }
 }
 
 # Données de repli statistiques officielles vérifiées (en cas d'absence de connexion internet)
 OFFLINE_BENCHMARKS = {
-    "chomage": {"valeur": 7.4, "annee": "2024-2025", "unite": "%"},
-    "inflation": {"valeur": 2.3, "annee": "2024-2025", "unite": "%"},
-    "pib_croissance": {"valeur": 1.1, "annee": "2024-2025", "unite": "%"},
+    "chomage": {"valeur": 7.4, "annee": "2024", "unite": "%"},
+    "inflation": {"valeur": 2.3, "annee": "2024", "unite": "%"},
+    "pib_croissance": {"valeur": 1.1, "annee": "2024", "unite": "%"},
     "dette_publique": {"valeur": 111.8, "annee": "2024", "unite": "% du PIB"},
-    "population": {"valeur": 68.4, "annee": "2024", "unite": "millions"}
+    "population": {"valeur": 68.4, "annee": "2024", "unite": "millions d'habitants"}
 }
 
 def fetch_world_bank_indicator(indicator_code: str, country: str = "FRA") -> Optional[Dict[str, Any]]:
@@ -60,7 +65,7 @@ def fetch_world_bank_indicator(indicator_code: str, country: str = "FRA") -> Opt
     url = f"https://api.worldbank.org/v2/country/{country}/indicator/{indicator_code}?format=json&per_page=5"
     try:
         req = urllib.request.Request(url, headers={"User-Agent": "PFE-Assistant/2.0"})
-        with urllib.request.urlopen(req, timeout=1.5) as response:
+        with urllib.request.urlopen(req, timeout=1.8) as response:
             if response.status == 200:
                 data = json.loads(response.read().decode("utf-8"))
                 if len(data) >= 2 and isinstance(data[1], list):
@@ -94,7 +99,7 @@ def extract_numbers_from_text(text: str) -> List[str]:
 def verify_factual_claims(text: str) -> List[Dict[str, Any]]:
     """
     Vérifie les données factuelles d'un texte d'opinion de manière déterministe.
-    Retourne la liste des rapprochements officiels (API Banque Mondiale / Insee).
+    Retourne des rapprochements clairs et compréhensibles par tous.
     """
     indicator_key = detect_indicator(text)
     numbers_found = extract_numbers_from_text(text)
@@ -102,58 +107,86 @@ def verify_factual_claims(text: str) -> List[Dict[str, Any]]:
 
     if indicator_key:
         meta = INDICATORS_MAP[indicator_key]
-        # Tentative d'appel API en ligne
         live_data = fetch_world_bank_indicator(meta["code"])
         
         if live_data:
             ref_val = live_data["valeur"]
             ref_year = live_data["annee"]
-            source_tag = f"API Banque Mondiale (Série {live_data.get('indicateur', meta['label'])}, {ref_year})"
+            source_tag = f"Banque Mondiale ({ref_year}) / Insee"
         else:
             fallback = OFFLINE_BENCHMARKS[indicator_key]
             ref_val = fallback["valeur"]
             ref_year = fallback["annee"]
-            source_tag = f"Série Officielle Insee / Eurostat ({meta['label']}, {ref_year})"
+            source_tag = f"Insee / Eurostat ({ref_year})"
 
-        for num in (numbers_found or ["Valeur citée dans le texte"]):
-            # Extraction valeur numérique pour calcul d'écart si possible
+        unit = meta.get("unite", "%")
+        target_numbers = numbers_found or ["Chiffre non précisé"]
+
+        for num in target_numbers:
             num_val_match = re.search(r'\d+(?:[\.,]\d+)?', num)
-            comparaison_str = "Rapprochement statistique disponible"
+            delta = None
+            verdict_clair = "Comparaison avec la donnée officielle disponible."
             
             if num_val_match:
                 try:
                     val_float = float(num_val_match.group(0).replace(',', '.'))
-                    delta = val_float - ref_val
+                    delta = round(val_float - ref_val, 2)
                     sign = "+" if delta > 0 else ""
-                    comparaison_str = f"Valeur officielle de référence : {ref_val} (Écart observé : {sign}{delta:.1f} pts)"
+                    
+                    if abs(delta) <= 1.0:
+                        verdict_clair = f"Le chiffre cité ({num}) est très proche de la réalité officielle ({ref_val} {unit})."
+                    elif delta > 0:
+                        verdict_clair = f"Le chiffre cité ({num}) est nettement supérieur à la réalité officielle ({ref_val} {unit}), soit un écart de {sign}{delta} points !"
+                    else:
+                        verdict_clair = f"Le chiffre cité ({num}) est inférieur à la réalité officielle ({ref_val} {unit}), soit un écart de {delta} points."
                 except Exception:
-                    comparaison_str = f"Valeur officielle de référence : {ref_val}"
+                    verdict_clair = f"Valeur officielle de référence : {ref_val} {unit}."
 
             results.append({
-                "chiffre": num,
+                "type_verification": "comparaison_disponible",
+                "chiffre_texte": num,
+                "chiffre_officiel": f"{ref_val} {unit}",
+                "indicateur_nom": meta["label"],
                 "source": source_tag,
-                "statut": "Vérifié sur source statistique ouverte",
-                "analyse": comparaison_str
+                "ecart": f"{sign}{delta} points" if delta is not None else "Non calculable",
+                "verdict_clair": verdict_clair,
+                "statut": "Vérifié sur source statistique officielle",
+                "chiffre": num,
+                "analyse": f"Chiffre cité : {num} vs Réalité officielle : {ref_val} {unit} ({source_tag}). {verdict_clair}"
             })
 
     elif numbers_found:
         for num in numbers_found:
             results.append({
+                "type_verification": "hors_indicateurs_macro",
+                "chiffre_texte": num,
+                "chiffre_officiel": "Non disponible dans les séries macroéconomiques",
+                "indicateur_nom": "Donnée spécifique",
+                "source": "Non répertoriée dans les 5 séries officielles directes (chômage, inflation, dette, PIB, population)",
+                "ecart": "N/A",
+                "verdict_clair": f"Le chiffre « {num} » est bien repéré dans le texte, mais ne correspond pas aux 5 grands indicateurs économiques nationaux suivis automatiquement.",
+                "statut": "Hors périmètre statistique direct",
                 "chiffre": num,
-                "source": "Catalogue Insee / Eurostat / Banque mondiale",
-                "statut": "non vérifiable automatiquement hors périmètre statistique ouvert",
-                "analyse": "Donnée spécifique non rattachée aux 5 séries macro-économiques directes du PoC."
+                "analyse": f"Le chiffre « {num} » n'est pas rattaché directement aux séries de chômage, inflation, PIB ou dette publique."
             })
     else:
         results.append({
-            "chiffre": "Aucune donnée chiffrée explicite identifiée",
+            "type_verification": "sans_chiffre",
+            "chiffre_texte": "Aucun chiffre cité",
+            "chiffre_officiel": "N/A",
+            "indicateur_nom": "Aucun",
             "source": "Non applicable",
-            "statut": "Information qualitative / jugement de valeur",
-            "analyse": "Le texte ne comporte pas d'affirmation statistique mesurable."
+            "ecart": "N/A",
+            "verdict_clair": "Aucune donnée chiffrée n'est avancée dans ce texte. L'argumentation repose uniquement sur des jugements d'opinion ou des idées sans statistiques à vérifier.",
+            "statut": "Information qualitative / sans chiffre",
+            "chiffre": "Aucun chiffre",
+            "analyse": "Le texte ne comporte pas de donnée chiffrée mesurable."
         })
 
     return results
 
 if __name__ == "__main__":
-    test_text = "Le chômage a explosé à 25% cette année selon les critiques !"
-    print("Test Fact-Checking :", verify_factual_claims(test_text))
+    t1 = "Le chômage a explosé à 25% cette année selon les critiques !"
+    print("Test 1 (Chômage) :", json.dumps(verify_factual_claims(t1), ensure_ascii=False, indent=2))
+    t2 = "Ce projet est une honte absolue pour notre pays."
+    print("Test 2 (Sans chiffre) :", json.dumps(verify_factual_claims(t2), ensure_ascii=False, indent=2))

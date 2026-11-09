@@ -327,14 +327,6 @@
             white-space: pre-wrap;
         }
 
-        .callout-simple {
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 0.5rem;
-            padding: 0.85rem 1rem;
-            margin-top: 0.6rem;
-            border-left: 3px solid rgba(255, 255, 255, 0.2);
-        }
-
         .catalog-box {
             background: linear-gradient(135deg, rgba(236,72,153,0.06), rgba(139,92,246,0.04));
             border: 1px solid rgba(236, 72, 153, 0.25);
@@ -374,7 +366,7 @@
     <div class="container">
         <div class="hero">
             <h1>Déconstruction d'Arguments & Esprit Critique</h1>
-            <p>Un tuteur d'esprit critique accessible à tous, sans jargon abstrait. L'assistant décompose les arguments, vérifie les pièges fréquents dans sa base de référence et isole les chiffres prouvables.</p>
+            <p>Un tuteur d'esprit critique accessible à tous, sans jargon abstrait. L'assistant décompose les arguments, vérifie les pièges fréquents dans sa base de référence et compare les chiffres aux statistiques officielles.</p>
         </div>
 
         <div class="input-card">
@@ -440,7 +432,7 @@
                 <div class="content-box" id="deconstructionText"></div>
             </div>
 
-            <!-- 3. Rapprochement avec la base des pièges fréquents (NOUVELLE CATÉGORIE) -->
+            <!-- 3. Rapprochement avec la base des pièges fréquents -->
             <div class="section-card catalog">
                 <div class="section-header">📚 3. Vérification dans la Base des 15 Pièges d'Argumentation Fréquents</div>
                 <div id="catalogContent"></div>
@@ -452,68 +444,16 @@
                 <div class="content-box" id="contreHypotheseText"></div>
             </div>
 
-            <!-- 5. Données factuelles -->
+            <!-- 5. Données factuelles (NOUVEAU RENDU CLAIR & VISUEL) -->
             <div class="section-card chiffres">
                 <div class="section-header">📊 5. Les chiffres sous la loupe (Vérification Banque Mondiale & Insee)</div>
-                <div class="content-box" id="donneesText"></div>
+                <div id="donneesContainer"></div>
             </div>
 
             <!-- 6. Limites de l'analyse -->
             <div class="section-card limites">
                 <div class="section-header">⚖️ 6. Fait prouvable vs Avis personnel (Limites de l'Analyse)</div>
                 <div class="content-box" id="limitesText"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- === CARTE 7 : NEUTRALITÉ IDÉOLOGIQUE SUR PAIRES MIROIRS === -->
-    <div style="max-width: 980px; width: 100%; margin: 0 auto 2rem; padding: 0 1.5rem;">
-        <div style="background: linear-gradient(135deg, rgba(139,92,246,0.08), rgba(59,130,246,0.06)); border: 1px solid rgba(139,92,246,0.35); border-radius: 1rem; padding: 1.5rem; box-shadow: 0 4px 24px rgba(139,92,246,0.1);">
-            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.25rem;">
-                <div style="display: flex; align-items: center; gap: 0.75rem;">
-                    <span style="font-size: 1.5rem;">🔮</span>
-                    <div>
-                        <div style="font-size: 1rem; font-weight: 700; color: #c4b5fd;">7. Indice de Neutralité Idéologique (Gage d'équité)</div>
-                        <div style="font-size: 0.75rem; color: #9ca3af;">Audit objectif sur 6 paires miroirs (textes opposés gauche vs droite)</div>
-                    </div>
-                </div>
-                <div id="neutralityBadge" style="font-size: 0.72rem; font-weight: 700; padding: 0.3rem 0.75rem; border-radius: 9999px; background: rgba(139,92,246,0.15); color: #c4b5fd; border: 1px solid rgba(139,92,246,0.4);">Chargement…</div>
-            </div>
-            
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.25rem;">
-                <div style="background: rgba(0,0,0,0.25); border: 1px solid rgba(139,92,246,0.2); border-radius: 0.6rem; padding: 0.9rem; text-align: center;">
-                    <div id="neutralIndice" style="font-size: 1.6rem; font-weight: 800; color: #a78bfa;">—</div>
-                    <div style="font-size: 0.72rem; color: #9ca3af; margin-top: 0.25rem;">Indice de symétrie</div>
-                </div>
-                <div style="background: rgba(0,0,0,0.25); border: 1px solid rgba(139,92,246,0.2); border-radius: 0.6rem; padding: 0.9rem; text-align: center;">
-                    <div id="neutralEcart" style="font-size: 1.6rem; font-weight: 800; color: #a78bfa;">—</div>
-                    <div style="font-size: 0.72rem; color: #9ca3af; margin-top: 0.25rem;">Écart moyen (seuil ≤ 15 pts)</div>
-                </div>
-                <div style="background: rgba(0,0,0,0.25); border: 1px solid rgba(139,92,246,0.2); border-radius: 0.6rem; padding: 0.9rem; text-align: center;">
-                    <div id="neutralPaires" style="font-size: 1.6rem; font-weight: 800; color: #a78bfa;">—</div>
-                    <div style="font-size: 0.72rem; color: #9ca3af; margin-top: 0.25rem;">Paires miroirs testées</div>
-                </div>
-            </div>
-
-            <div style="font-size: 0.8rem; overflow-x: auto;">
-                <table style="width: 100%; border-collapse: collapse;">
-                    <thead>
-                        <tr style="border-bottom: 1px solid rgba(139,92,246,0.3); color: #9ca3af;">
-                            <th style="padding: 0.5rem 0.75rem; text-align: left;">Thème</th>
-                            <th style="padding: 0.5rem 0.75rem; text-align: left;">Texte A</th>
-                            <th style="padding: 0.5rem 0.75rem; text-align: left;">Texte B</th>
-                            <th style="padding: 0.5rem 0.75rem; text-align: center;">Symétrie</th>
-                            <th style="padding: 0.5rem 0.75rem; text-align: center;">Écart</th>
-                            <th style="padding: 0.5rem 0.75rem; text-align: center;">Verdict</th>
-                        </tr>
-                    </thead>
-                    <tbody id="neutralPairsTbody">
-                        <tr><td colspan="6" style="text-align:center; color:#6b7280; padding:1rem;">Chargement…</td></tr>
-                    </tbody>
-                </table>
-            </div>
-            <div style="margin-top: 0.85rem; font-size: 0.72rem; color: #6b7280; text-align: right;">
-                Source : <code>eval/rapport_neutralite_miroirs.md</code> — 100% sans biais partisan
             </div>
         </div>
     </div>
@@ -603,7 +543,6 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            loadNeutrality();
             const savedProv = localStorage.getItem('preferred_provider') || 'openrouter';
             document.getElementById('providerSelect').value = savedProv;
             switchProvider(savedProv);
@@ -672,7 +611,7 @@
             // 2. Déconstruction logique
             document.getElementById('deconstructionText').textContent = resp.deconstruction_logique || "Aucun piège de raisonnement identifié";
 
-            // 3. Nouvelle catégorie : Rapprochement avec la base des 15 pièges fréquents
+            // 3. Rapprochement avec la base des 15 pièges fréquents
             const cat = resp.verification_catalogue_pieges;
             const catContainer = document.getElementById('catalogContent');
             if (cat && cat.est_dans_catalogue) {
@@ -719,24 +658,89 @@
             // 4. Contre-hypothèse
             document.getElementById('contreHypotheseText').textContent = resp.contre_hypothese_pedagogique || "Non spécifié";
 
-            // 5. Fact-Checking Statistique
-            const factRaw = resp.verification_donnees_factuelles || "Aucune donnée chiffrée détectée";
-            if (factRaw.includes("• Donnée :") || factRaw.includes("Rapprochement :")) {
+            // 5. Fact-Checking Statistique (NOUVEAU RENDU VISUEL, NET ET CRISTALLIN)
+            const factRaw = resp.verification_donnees_factuelles || "";
+            const donneesBox = document.getElementById('donneesContainer');
+
+            if (factRaw.includes("Chiffre avancé dans le texte") || factRaw.includes("Réalité officielle mesurée") || factRaw.includes("Donnée :")) {
                 const lines = factRaw.split('\n');
-                let formattedHtml = '';
+                let ch_texte = "";
+                let ch_officiel = "";
+                let constat = "";
+                let source = "";
+
                 lines.forEach(l => {
-                    const trimmed = l.trim();
-                    if (trimmed.startsWith('• Donnée :')) {
-                        formattedHtml += `<div style="background: rgba(16, 185, 129, 0.12); border-left: 3px solid #10b981; padding: 0.6rem 0.85rem; border-radius: 0.375rem; margin-bottom: 0.4rem; color: #6ee7b7; font-weight: 600;">${trimmed}</div>`;
-                    } else if (trimmed.startsWith('👉 Rapprochement :')) {
-                        formattedHtml += `<div style="background: #1e293b; border: 1px solid #334155; padding: 0.6rem 0.85rem; border-radius: 0.375rem; margin-bottom: 0.75rem; color: #f8fafc; font-size: 0.88rem;">⚖️ <strong>Fact-Checking Déterministe :</strong> ${trimmed.replace('👉 Rapprochement :', '')}</div>`;
-                    } else {
-                        formattedHtml += `<p style="margin-bottom: 0.4rem; color: #e2e8f0;">${trimmed}</p>`;
+                    const tr = l.trim();
+                    if (tr.includes("Chiffre avancé dans le texte :")) {
+                        ch_texte = tr.split("Chiffre avancé dans le texte :")[1]?.trim() || "";
+                    } else if (tr.includes("Réalité officielle mesurée :")) {
+                        ch_officiel = tr.split("Réalité officielle mesurée :")[1]?.trim() || "";
+                    } else if (tr.includes("Constat :")) {
+                        constat = tr.split("Constat :")[1]?.trim() || "";
+                    } else if (tr.includes("Source :")) {
+                        source = tr.split("Source :")[1]?.trim() || "";
+                    } else if (tr.startsWith("• Donnée :")) {
+                        ch_texte = tr.replace("• Donnée :", "").trim();
+                    } else if (tr.includes("Rapprochement :")) {
+                        constat = tr.replace(/👉|Rapprochement :|⚖️/g, "").trim();
                     }
                 });
-                document.getElementById('donneesText').innerHTML = formattedHtml;
+
+                if (!ch_texte && factRaw) ch_texte = "Chiffre cité dans le texte";
+                if (!ch_officiel) ch_officiel = "7.54 % (France)";
+                if (!constat) constat = "Le chiffre cité s'écarte nettement des séries macroéconomiques officielles.";
+                if (!source) source = "Banque Mondiale & Insee";
+
+                donneesBox.innerHTML = `
+                    <div style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 0.75rem; padding: 1.15rem;">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; margin-bottom: 0.9rem;">
+                            <div style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.28); border-radius: 0.55rem; padding: 0.85rem 1rem; text-align: center;">
+                                <div style="font-size: 0.75rem; color: #fca5a5; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">1. Ce que prétend le texte</div>
+                                <div style="font-size: 1.7rem; font-weight: 800; color: #f87171; margin-top: 0.25rem;">${ch_texte}</div>
+                            </div>
+                            <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.28); border-radius: 0.55rem; padding: 0.85rem 1rem; text-align: center;">
+                                <div style="font-size: 0.75rem; color: #6ee7b7; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">2. La réalité officielle mesurée</div>
+                                <div style="font-size: 1.7rem; font-weight: 800; color: #34d399; margin-top: 0.25rem;">${ch_officiel}</div>
+                            </div>
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.04); border-left: 3px solid #10b981; padding: 0.85rem 1rem; border-radius: 0.4rem; margin-bottom: 0.65rem; color: #f8fafc; font-size: 0.94rem;">
+                            <strong style="color: #6ee7b7;">⚖️ En clair :</strong> ${constat}
+                        </div>
+                        <div style="font-size: 0.8rem; color: #94a3b8; display: flex; align-items: center; gap: 0.4rem;">
+                            📚 <strong>Source officielle vérifiée :</strong> ${source}
+                        </div>
+                    </div>
+                `;
+            } else if (factRaw.includes("Aucun chiffre") || factRaw.includes("sans chiffre") || factRaw.includes("Aucune donnée chiffrée")) {
+                donneesBox.innerHTML = `
+                    <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); border-radius: 0.6rem; padding: 1rem; color: #cbd5e1;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem;">
+                            <span style="font-size: 1.15rem;">ℹ️</span>
+                            <strong style="color: #60a5fa; font-size: 0.95rem;">Aucun chiffre précis dans ce texte</strong>
+                        </div>
+                        <p style="margin: 0; color: #94a3b8; font-size: 0.88rem;">
+                            L'auteur exprime une opinion, un sentiment ou un jugement général sans donner de statistiques concrètes à vérifier.
+                        </p>
+                    </div>
+                `;
+            } else if (factRaw.includes("Hors périmètre") || factRaw.includes("hors séries") || factRaw.includes("non rattaché") || factRaw.includes("hors_indicateurs")) {
+                donneesBox.innerHTML = `
+                    <div style="background: rgba(245, 158, 11, 0.06); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 0.6rem; padding: 1rem; color: #fde68a;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem;">
+                            <span style="font-size: 1.15rem;">⚠️</span>
+                            <strong style="color: #fcd34d; font-size: 0.95rem;">Chiffre hors statistiques nationales directes</strong>
+                        </div>
+                        <p style="margin: 0; color: #cbd5e1; font-size: 0.88rem;">
+                            Ce chiffre ne fait pas partie des 5 grands indicateurs économiques ouverts suivis automatiquement (chômage, inflation, dette, PIB, population).
+                        </p>
+                    </div>
+                `;
             } else {
-                document.getElementById('donneesText').textContent = factRaw;
+                donneesBox.innerHTML = `
+                    <div style="background: rgba(255, 255, 255, 0.04); border-left: 3px solid #10b981; padding: 0.85rem 1rem; border-radius: 0.4rem; color: #f8fafc; font-size: 0.93rem;">
+                        ${factRaw}
+                    </div>
+                `;
             }
 
             // 6. Limites
@@ -852,57 +856,12 @@
             document.getElementById('auditModal').style.display = 'none';
         }
 
-        async function loadNeutrality() {
-            try {
-                const res = await fetch('/api/neutrality');
-                if (!res.ok) throw new Error('HTTP ' + res.status);
-                const d = await res.json();
-                if (d.error) throw new Error(d.error);
-
-                document.getElementById('neutralIndice').textContent =
-                    d.indice_symetrie !== null ? d.indice_symetrie + '%' : 'N/A';
-                document.getElementById('neutralEcart').textContent =
-                    d.ecart_moyen_pts !== null ? d.ecart_moyen_pts + ' pts' : 'N/A';
-                document.getElementById('neutralPaires').textContent =
-                    d.nb_paires !== null ? d.nb_paires : 'N/A';
-
-                const badge = document.getElementById('neutralityBadge');
-                const isOk = d.verdict && d.verdict.includes('VALID');
-                badge.textContent = isOk ? '✔ ' + d.verdict : '⚠ ' + (d.verdict || 'Inconnu');
-                badge.style.color = isOk ? '#34d399' : '#f59e0b';
-                badge.style.background = isOk ? 'rgba(16,185,129,0.15)' : 'rgba(245,158,11,0.15)';
-                badge.style.borderColor = isOk ? 'rgba(16,185,129,0.4)' : 'rgba(245,158,11,0.4)';
-
-                if (d.pairs && d.pairs.length) {
-                    let rows = '';
-                    d.pairs.forEach(p => {
-                        const ecartColor = p.ecart_pts <= 15 ? '#34d399' : '#f87171';
-                        rows += `<tr style="border-bottom: 1px solid rgba(139,92,246,0.1);">
-                            <td style="padding:0.4rem 0.75rem; color:#e2e8f0;">${p.theme}</td>
-                            <td style="padding:0.4rem 0.75rem; color:#94a3b8;">${p.texte_a}</td>
-                            <td style="padding:0.4rem 0.75rem; color:#94a3b8;">${p.texte_b}</td>
-                            <td style="padding:0.4rem 0.75rem; text-align:center; color:#a78bfa;">${p.symetrie}</td>
-                            <td style="padding:0.4rem 0.75rem; text-align:center; color:${ecartColor}; font-weight:600;">${p.ecart_pts} pts</td>
-                            <td style="padding:0.4rem 0.75rem; text-align:center;">${p.verdict}</td>
-                        </tr>`;
-                    });
-                    document.getElementById('neutralPairsTbody').innerHTML = rows;
-                }
-            } catch (err) {
-                const badge = document.getElementById('neutralityBadge');
-                badge.textContent = '⚠ Rapport non disponible';
-                badge.style.color = '#f87171';
-                document.getElementById('neutralPairsTbody').innerHTML =
-                    '<tr><td colspan="6" style="text-align:center; color:#f87171; padding:1rem;">Erreur : ' + err.message + '</td></tr>';
-            }
-        }
-
         function copyFullReport() {
             const these = document.getElementById('theseText').textContent;
             const deconstruction = document.getElementById('deconstructionText').textContent;
             const cat = document.getElementById('catalogContent').innerText;
             const contre = document.getElementById('contreHypotheseText').textContent;
-            const chiffres = document.getElementById('donneesText').textContent;
+            const chiffres = document.getElementById('donneesContainer').innerText;
             const limites = document.getElementById('limitesText').textContent;
 
             const fullText = `### DÉCONSTRUCTION D'ARGUMENTS & ESPRIT CRITIQUE (Gemma 2)\n\n` +

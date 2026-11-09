@@ -83,17 +83,28 @@ class ArgumentAnalysisResponse(BaseModel):
             formatted = []
             for item in v:
                 if isinstance(item, dict):
-                    chiffre = item.get("chiffre") or item.get("donnee") or ""
-                    source = item.get("source") or item.get("reference") or "Source non spécifiée"
-                    statut = item.get("statut") or item.get("verdict") or "non vérifiable automatiquement"
-                    analyse = item.get("analyse")
-                    if analyse:
-                        formatted.append(f"• Donnée : {chiffre} | {source} [{statut}]\n  👉 Rapprochement : {analyse}")
+                    chiffre_texte = item.get("chiffre_texte") or item.get("chiffre") or ""
+                    chiffre_officiel = item.get("chiffre_officiel")
+                    verdict_clair = item.get("verdict_clair")
+                    source = item.get("source") or "Banque Mondiale & Insee"
+                    
+                    if item.get("type_verification") == "comparaison_disponible" and chiffre_officiel and chiffre_officiel != "N/A":
+                        formatted.append(
+                            f"📊 Chiffre avancé dans le texte : {chiffre_texte}\n"
+                            f"🏛️ Réalité officielle mesurée : {chiffre_officiel}\n"
+                            f"⚖️ Constat : {verdict_clair}\n"
+                            f"📚 Source : {source}"
+                        )
+                    elif verdict_clair:
+                        formatted.append(f"ℹ️ {verdict_clair}")
+                    elif item.get("analyse"):
+                        formatted.append(f"• {item.get('analyse')}")
                     else:
-                        formatted.append(f"• Donnée : {chiffre} | {source} [{statut}]")
+                        formatted.append(f"• Chiffre : {chiffre_texte} ({source})")
                 else:
                     formatted.append(str(item))
-            return "\n".join(formatted)
+            return "\n\n".join(formatted)
+        return str(v).strip()
         return str(v).strip()
 
 # Alias pour rétro-compatibilité

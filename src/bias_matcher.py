@@ -199,3 +199,4 @@ if __name__ == "__main__":
     print("Test 1 (Faux dilemme) :", json.dumps(match_fallacy_in_catalog(test1), ensure_ascii=False, indent=2))
     test2 = "Regardez ces images de petits enfants affamés, signez ce chèque !"
     print("Test 2 (Appel émotion) :", json.dumps(match_fallacy_in_catalog(test2), ensure_ascii=False, indent=2))
+
