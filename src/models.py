@@ -34,6 +34,10 @@ class ArgumentAnalysisResponse(BaseModel):
         ..., 
         description="Distinction explicite entre ce qui relève du fait vérifiable et ce qui relève du jugement de valeur / opinion."
     )
+    verification_catalogue_pieges: Optional[Dict[str, Any]] = Field(
+        default=None,
+        description="Vérification et rapprochement avec la base des 15 pièges d'argumentation les plus fréquents (fallacy_catalog)."
+    )
 
     @field_validator("these_principale", mode="before")
     def sanitize_these(cls, v):

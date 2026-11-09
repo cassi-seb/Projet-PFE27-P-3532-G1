@@ -52,6 +52,28 @@ class AssistantHandler(http.server.SimpleHTTPRequestHandler):
                 self._send_json({"error": str(e)}, status=500)
             return
 
+        if self.path == "/api/catalog":
+            try:
+                from src.bias_matcher import load_raw_catalog, PEDAGOGICAL_PROFILES
+                catalog = load_raw_catalog()
+                enriched = []
+                for item in catalog:
+                    ftype = item.get("fallacy_type", "")
+                    profile = PEDAGOGICAL_PROFILES.get(ftype, {})
+                    enriched.append({
+                        "id": item.get("id"),
+                        "type": ftype,
+                        "nom_simple": profile.get("nom_simple", ftype),
+                        "en_clair": profile.get("en_clair", ""),
+                        "pourquoi_trompeur": profile.get("pourquoi_trompeur", ""),
+                        "astuce_reconnaitre": profile.get("astuce_reconnaitre", ""),
+                        "exemple": item.get("text", "")
+                    })
+                self._send_json({"total": len(enriched), "catalogue": enriched})
+            except Exception as e:
+                self._send_json({"error": str(e)}, status=500)
+            return
+
         if self.path == "/api/logs":
             try:
                 import sqlite3
@@ -107,13 +129,20 @@ class AssistantHandler(http.server.SimpleHTTPRequestHandler):
                 # Support rétro-compatible question, texte et text
                 user_text = data.get("texte") or data.get("text") or data.get("question") or ""
                 user_text = user_text.strip()
-                api_key = data.get("api_key") or data.get("groq_key") or None
+                api_key = data.get("api_key") or data.get("openrouter_key") or data.get("groq_key") or None
+                provider = data.get("provider") or None
+                model = data.get("model") or None
 
                 if not user_text:
                     self._send_json({"error": "Le texte à analyser ne peut pas être vide."}, status=400)
                     return
 
-                resp, is_valid, latency_ms, raw_text = query_assistant(user_text, api_key=api_key)
+                resp, is_valid, latency_ms, raw_text = query_assistant(
+                    user_text, 
+                    api_key=api_key, 
+                    model=model, 
+                    provider=provider
+                )
 
                 result = {
                     "is_valid": is_valid,

@@ -34,15 +34,16 @@ Quand on lui soumet un texte comme :
 
 > *"Le chômage a explosé à 25% ! Soit on supprime toutes les aides sociales, soit l'économie fait faillite."*
 
-L'assistant répond en 5 blocs structurés :
+L'assistant répond en 6 blocs structurés et accessibles à tous :
 
-| # | Bloc | Ce qu'il fait |
-|---|------|---------------|
-| 1 | **Thèse principale** | Reformule neutralement ce que l'auteur défend |
-| 2 | **Déconstruction logique** | Identifie les failles de raisonnement avec citation exacte |
-| 3 | **Contre-hypothèse réflexive** | Pose une question stimulante pour nuancer |
-| 4 | **Fact-checking statistique** | Compare les chiffres cités aux données officielles (Banque Mondiale) |
-| 5 | **Limites de l'analyse** | Distingue faits vérifiables et jugements de valeur |
+| # | Bloc | Ce qu'il fait en langage simple |
+|---|------|---------------------------------|
+| 1 | **Thèse principale** | En clair, que défend l'auteur ? (Résumé simple et neutre) |
+| 2 | **Déconstruction logique** | Comment le texte tente de convaincre (avec citation exacte) |
+| 3 | **Base des 15 pièges fréquents** | Vérifie si le piège est répertorié dans la base officielle (`fallacy_catalog.jsonl`) et l'explique sans jargon |
+| 4 | **Contre-hypothèse bienveillante** | Pose une question stimulante pour voir les choses sous un autre angle |
+| 5 | **Fact-checking statistique** | Compare les chiffres cités aux données officielles (Banque Mondiale & Insee) |
+| 6 | **Limites de l'analyse** | Distingue faits prouvables et opinions personnelles citoyennes |
 
 ### Philosophie centrale
 

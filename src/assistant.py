@@ -4,7 +4,7 @@ import os
 import re
 import sys
 from pathlib import Path
-from typing import Tuple, Optional
+from typing import Tuple, Optional, Dict, Any
 
 # Assurer l'importation de src quel que soit le point d'entrée
 sys.path.append(str(Path(__file__).resolve().parent.parent))
@@ -13,6 +13,7 @@ from pydantic import ValidationError
 from src.models import ArgumentAnalysisResponse, PedagogicalResponse
 from src.logger import log_interaction
 from src.fact_checker import verify_factual_claims
+from src.bias_matcher import match_fallacy_in_catalog
 
 try:
     from dotenv import load_dotenv
@@ -20,44 +21,73 @@ try:
 except ImportError:
     pass
 
-PROMPT_VERSION = "v2.0.0-gemma-argument-analysis"
-DEFAULT_MODEL_NAME = "gemma2-9b-it"
+PROMPT_VERSION = "v2.1.0-gemma-accessible-catalog"
+DEFAULT_GROQ_MODEL = "gemma2-9b-it"
+DEFAULT_OPENROUTER_MODEL = "google/gemma-2-9b-it"
+DEFAULT_MODEL_NAME = DEFAULT_GROQ_MODEL
 
-# Rôle pédagogique strict : Ni censeur, ni arbitre (Tuteur d'esprit critique)
-SYSTEM_PROMPT = """Tu es un assistant pédagogique d’esprit critique et de déconstruction d’arguments en langue française, fondé sur le modèle Google Gemma 2.
-Ton rôle est d'être un TUTEUR D'ESPRIT CRITIQUE, JAMAIS UN ARBITRE.
+# Rôle pédagogique strict : Ni censeur, ni arbitre (Tuteur d'esprit critique accessible à tous)
+SYSTEM_PROMPT = """Tu es un assistant pédagogique d’esprit critique et de déconstruction d'arguments en langue française, fondé sur Google Gemma 2.
+Ton rôle est d'être un TUTEUR D'ESPRIT CRITIQUE accessible à tous, JAMAIS UN ARBITRE.
 Tu ne dois JAMAIS dire qui a tort ou raison, ni déclarer si un texte est "vrai" ou "faux" dans son ensemble.
+
+DIRECTIVE ESSENTIELLE DE STYLE ET CLARTÉ :
+Tes réponses doivent être SIMPLES, DIRECTES, CONCRÈTES et COMPRÉHENSIBLES PAR TOUS (citoyens, étudiants, lycéens).
+Bannis le jargon abstrait ou inutilement universitaire. Explique toujours "en clair" ce qui se passe avec des mots du quotidien.
+N'emploie JAMAIS le mot "sophisme" : utilise toujours "faille logique", "piège d'argumentation" ou "raccourci trompeur".
 
 Tu dois TOUJOURS répondre en FRANÇAIS, sous la forme exclusive d'un objet JSON strict avec exactement ces 5 clés :
 
 1. "these_principale": (chaîne)
-   Reformulation synthétique, claire et strictement neutre de la thèse centrale défendue dans le texte, sans adjectif polarisant ni parti pris.
+   En clair, que défend l'auteur ? Résume l'idée centrale en une ou deux phrases simples, calmes et strictement neutres, sans prendre parti.
 
 2. "deconstruction_logique": (liste d'objets ou de chaînes)
-   Analyse de la mécanique argumentative. Si une faille logique, un piège d'argumentation ou un raccourci trompeur est soupçonné (parmi : Attaque personnelle / Ad hominem, Caricature de la position adverse, Faux dilemme / deux seules options présentées, Effet domino / Pente glissante, Généralisation hâtive, Appel aux émotions, Fausse cause / coïncidence confondue avec cause), tu dois TOUJOURS citer le passage textuel exact entre guillemets et utiliser la formule de prudence "Faille logique possible" ou "Piège d'argumentation possible" :
-   Exemple d'élément : {"nom": "Piège d'argumentation possible : Caricature", "passage_cite": "les partisans du projet veulent détruire tout emploi", "explication": "Déformation excessive de la position opposée pour la rejeter plus facilement."}
+   Comment le texte tente de convaincre et où est le piège de raisonnement ?
+   Repère les pièges fréquents (Attaque personnelle, Caricature / Homme de paille, Faux dilemme "tout noir ou tout blanc", Pente glissante / effet domino imaginaire, Généralisation hâtive, Appel aux émotions, Fausse cause / coïncidence).
+   Pour chaque piège, cite OBLIGATOIREMENT le passage exact entre guillemets et explique de façon très simple pourquoi ce raisonnement peut tromper le lecteur.
+   Exemple d'élément : {"nom": "Piège d'argumentation possible : Caricature", "passage_cite": "les partisans du projet veulent détruire tout emploi", "explication": "On exagère volontairement l'avis adverse pour le faire paraître ridicule, plutôt que de discuter des vrais arguments."}
 
 3. "contre_hypothese_pedagogique": (chaîne)
-   Une question contradictoire stimulante et bienveillante ou une perspective alternative qui incite le lecteur à approfondir sa réflexion par lui-même, sans jamais le braquer ni imposer une opinion.
+   La question pour voir les choses autrement : une question simple, concrète et stimulante qui aide le lecteur à réfléchir sans le culpabiliser ni lui imposer une opinion.
 
 4. "verification_donnees_factuelles": (liste d'objets ou de chaînes)
-   Repérage des données chiffrées, dates ou grandeurs mesurables. Pour chaque chiffre :
-   - Citer la valeur trouvée dans le texte.
-   - Mentionner la source de référence ouverte appropriée (Insee, Banque mondiale, Eurostat) ou indiquer explicitement "non vérifiable automatiquement hors périmètre statistique ouvert".
-   - Ne JAMAIS inventer de données non présentes.
+   Les chiffres sous la loupe : pour chaque chiffre ou grandeur mesurable, citer la valeur exacte trouvée dans le texte et mentionner la source officielle de référence (Banque mondiale, Insee, Eurostat) ou indiquer "non vérifiable automatiquement hors périmètre statistique ouvert". Ne jamais inventer de données.
 
 5. "limites_analyse": (chaîne ou liste de chaînes)
-   Distinction méthodique entre ce qui relève du fait matériel vérifiable et ce qui relève du jugement de valeur, de la préférence politique ou morale, en rappelant que le jugement de valeur appartient au lecteur citoyen.
+   Fait prouvable vs avis personnel : expliquer très simplement ce qui peut être vérifié avec des données concrètes et ce qui relève d'une opinion ou d'un choix citoyen que chacun est libre d'avoir.
 
 Réponds UNIQUEMENT par l'objet JSON valide, sans balises Markdown autour (pas de ```json), sans texte introductif ni conclusion.
 """
 
-def query_groq_gemma(text: str, api_key: str, model: str = DEFAULT_MODEL_NAME) -> str:
+def query_openrouter(text: str, api_key: str, model: str = DEFAULT_OPENROUTER_MODEL) -> str:
+    """Interroge le modèle via l'API OpenRouter (compatible Gemma 2, Llama, Mistral, etc.)."""
+    import requests
+    url = "https://openrouter.ai/api/v1/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {api_key.strip()}",
+        "HTTP-Referer": "http://localhost:8000",
+        "X-Title": "Assistant Esprit Critique PFE",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "model": model,
+        "messages": [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": f"Texte à analyser :\n\n{text}"}
+        ],
+        "temperature": 0.2
+    }
+    response = requests.post(url, headers=headers, json=payload, timeout=35)
+    response.raise_for_status()
+    res_json = response.json()
+    return res_json["choices"][0]["message"]["content"]
+
+def query_groq_gemma(text: str, api_key: str, model: str = DEFAULT_GROQ_MODEL) -> str:
     """Interroge le modèle Gemma 2 hébergé gratuitement et ultra-rapidement sur Groq."""
     import requests
     url = "https://api.groq.com/openai/v1/chat/completions"
     headers = {
-        "Authorization": f"Bearer {api_key}",
+        "Authorization": f"Bearer {api_key.strip()}",
         "Content-Type": "application/json"
     }
     payload = {
@@ -91,49 +121,50 @@ def query_openai_compatible(text: str, api_key: str, model: str = "gpt-4o-mini",
 def generate_pedagogical_simulation(text: str) -> str:
     """
     Simulation pédagogique d'esprit critique haute-fidélité (0 latence, 0 dépendance externe).
-    Intègre le module déterministe de fact-checking ouvert (Banque Mondiale / Insee).
+    Fournit des explications simples, concrètes et adaptées au grand public.
     """
     words = text.split()
     extrait = " ".join(words[:10]) + ("..." if len(words) > 10 else "")
     
-    # Appel du module de vérification déterministe des chiffres (O5)
+    # Appel du module de vérification déterministe des chiffres (Banque Mondiale / Insee)
     factual_results = verify_factual_claims(text)
+    
+    # Appel du module de rapprochement avec la base des pièges fréquents
+    catalog_match = match_fallacy_in_catalog(text)
+    nom_piege = catalog_match.get("nom_simple", "Raccourci de raisonnement possible")
+    explication_simple = catalog_match.get("en_clair", "Ce propos présente une conclusion tranchée sans détailler toutes les étapes qui mènent à cette affirmation.")
 
     mock_data = {
-        "these_principale": f"L'argumentation présentée affirme que la position défendue (« {extrait} ») constitue la seule voie cohérente face aux enjeux décrits.",
+        "these_principale": f"L'auteur affirme que la position résumée par « {extrait} » constitue la réponse évidente au problème soulevé.",
         "deconstruction_logique": [
             {
-                "nom": "Prémisse initiale identifiée",
+                "nom": f"Piège d'argumentation possible : {nom_piege}",
                 "passage_cite": extrait,
-                "explication": "Le propos pose comme point de départ une relation de cause à effet directe sans exposer les variables intermédiaires."
-            },
-            {
-                "nom": "Faille logique possible : Raccourci ou Faux dilemme",
-                "passage_cite": extrait,
-                "explication": "Tendance à restreindre le débat à deux options opposées ou à généraliser à partir d'un constat particulier."
+                "explication": explication_simple
             }
         ],
-        "contre_hypothese_pedagogique": "Quelles données ou perspectives alternatives permettraient de nuancer ce point de vue sans balayer la préoccupation initiale de l'auteur ?",
+        "contre_hypothese_pedagogique": "Quelles autres explications ou solutions modérées permettraient de nuancer ce point de vue sans balayer la préoccupation de départ ?",
         "verification_donnees_factuelles": factual_results,
-        "limites_analyse": "L'analyse isole les affirmations mesurables mais rappelle que le jugement d'opportunité, d'éthique ou de justice relève de l'appréciation propre du citoyen."
+        "limites_analyse": "Les données chiffrées éventuelles peuvent être vérifiées auprès d'organismes officiels, mais juger si cette idée est souhaitable ou juste relève de l'opinion personnelle de chaque citoyen.",
+        "verification_catalogue_pieges": catalog_match
     }
     return json.dumps(mock_data, ensure_ascii=False)
 
 def query_assistant(
     text: str, 
     api_key: Optional[str] = None, 
-    model: Optional[str] = None
+    model: Optional[str] = None,
+    provider: Optional[str] = None
 ) -> Tuple[Optional[ArgumentAnalysisResponse], bool, float, str]:
     """
-    Interroge l'assistant d'esprit critique (Gemma 2), valide le contrat de sortie
-    et journalise l'échange dans SQLite.
+    Interroge l'assistant d'esprit critique (Gemma 2 via OpenRouter ou Groq), 
+    valide le contrat de sortie et journalise l'échange dans SQLite.
     
-    Ordre de priorité (100% SANS Ollama) :
-    1. API Groq gratuite pour Gemma 2 (gemma2-9b-it) si GROQ_API_KEY est définie
-    2. API OpenAI / OpenRouter si OPENAI_API_KEY est fournie
-    3. Simulation pédagogique haute-fidélité immédiate (aucun coût, aucune dépendance)
-    
-    Retourne : (reponse_validee, est_json_valide, latence_ms, contenu_brut)
+    Supporte nativement :
+    1. OpenRouter (clé commençant par sk-or- ou variable OPENROUTER_API_KEY)
+    2. Groq (clé commençant par gsk_ ou variable GROQ_API_KEY)
+    3. OpenAI si OPENAI_API_KEY est fournie
+    4. Simulation pédagogique haute-fidélité immédiate
     """
     start_time = time.time()
     raw_response = ""
@@ -141,33 +172,59 @@ def query_assistant(
     validated_obj = None
     error_msg = None
 
-    # Détection de la clé Groq (soit variable GROQ_API_KEY, soit api_key passée commençant par gsk_)
-    groq_key = os.getenv("GROQ_API_KEY")
-    if api_key:
-        if api_key.startswith("gsk_") or not groq_key:
-            groq_key = api_key
+    openrouter_env = os.getenv("OPENROUTER_API_KEY")
+    groq_env = os.getenv("GROQ_API_KEY")
+    openai_env = os.getenv("OPENAI_API_KEY")
 
-    openai_key = api_key or os.getenv("OPENAI_API_KEY")
+    active_key = api_key or ""
+    active_provider = (provider or "").lower()
 
-    # 1. Utilisation de Gemma 2 via Groq API (gratuit, ultra-rapide)
-    if groq_key:
+    # Détection intelligente du fournisseur
+    if active_key.startswith("sk-or-") or active_provider == "openrouter":
+        target_provider = "openrouter"
+        chosen_key = active_key or openrouter_env
+    elif active_key.startswith("gsk_") or active_provider == "groq":
+        target_provider = "groq"
+        chosen_key = active_key or groq_env
+    elif openrouter_env:
+        target_provider = "openrouter"
+        chosen_key = openrouter_env
+    elif groq_env:
+        target_provider = "groq"
+        chosen_key = groq_env
+    elif openai_env or active_key:
+        target_provider = "openai"
+        chosen_key = active_key or openai_env
+    else:
+        target_provider = "simulation"
+        chosen_key = None
+
+    # Exécution selon le fournisseur
+    if target_provider == "openrouter" and chosen_key:
         try:
-            target_model = model or DEFAULT_MODEL_NAME
-            raw_response = query_groq_gemma(text, api_key=groq_key, model=target_model)
+            target_model = model or DEFAULT_OPENROUTER_MODEL
+            raw_response = query_openrouter(text, api_key=chosen_key, model=target_model)
         except Exception as e:
-            error_msg = f"Erreur API Groq Gemma : {str(e)}"
+            error_msg = f"Erreur API OpenRouter ({str(e)})"
             raw_response = ""
 
-    # 2. Repli sur OpenAI / OpenRouter si disponible
-    elif openai_key:
+    elif target_provider == "groq" and chosen_key:
         try:
-            raw_response = query_openai_compatible(text, api_key=openai_key, model=model or "gpt-4o-mini")
+            target_model = model or DEFAULT_GROQ_MODEL
+            raw_response = query_groq_gemma(text, api_key=chosen_key, model=target_model)
         except Exception as e:
-            error_msg = f"Erreur API Cloud : {str(e)}"
+            error_msg = f"Erreur API Groq Gemma ({str(e)})"
             raw_response = ""
 
-    # 3. Repli automatique et immédiat sur la simulation haute-fidélité
-    if not raw_response and not error_msg:
+    elif target_provider == "openai" and chosen_key:
+        try:
+            raw_response = query_openai_compatible(text, api_key=chosen_key, model=model or "gpt-4o-mini")
+        except Exception as e:
+            error_msg = f"Erreur API OpenAI ({str(e)})"
+            raw_response = ""
+
+    # Repli automatique sur simulation si aucune clé ou si l'API échoue
+    if not raw_response:
         raw_response = generate_pedagogical_simulation(text)
 
     latency_ms = (time.time() - start_time) * 1000.0
@@ -182,16 +239,31 @@ def query_assistant(
         cleaned_json = cleaned_json[:-3]
     cleaned_json = cleaned_json.strip()
 
-    # Validation Pydantic du contrat à 5 champs
+    # Extraction sécurisée du premier bloc JSON complet si du texte entoure l'objet
+    if "{" in cleaned_json and "}" in cleaned_json:
+        start_idx = cleaned_json.find("{")
+        end_idx = cleaned_json.rfind("}") + 1
+        cleaned_json = cleaned_json[start_idx:end_idx]
+
+    # Validation Pydantic du contrat de sortie
     if cleaned_json:
         try:
             parsed_json = json.loads(cleaned_json)
             
-            # Module Déterministe de Fact-Checking Statistique (Objectif O5) :
-            # Les données officielles proviennent TOUJOURS de l'API Banque Mondiale / Insee, JAMAIS du LLM
+            # Module Déterministe de Fact-Checking Statistique (Banque Mondiale / Insee)
             fact_checks = verify_factual_claims(text)
             if fact_checks:
                 parsed_json["verification_donnees_factuelles"] = fact_checks
+
+            # Module Déterministe de Rapprochement avec le Catalogue des 15 Pièges Fréquents
+            deconstruction_val = parsed_json.get("deconstruction_logique", "")
+            if isinstance(deconstruction_val, list):
+                deconstruction_str = " ".join(str(x) for x in deconstruction_val)
+            else:
+                deconstruction_str = str(deconstruction_val)
+
+            catalog_check = match_fallacy_in_catalog(text, deconstruction_str)
+            parsed_json["verification_catalogue_pieges"] = catalog_check
 
             validated_obj = ArgumentAnalysisResponse(**parsed_json)
             is_valid = True

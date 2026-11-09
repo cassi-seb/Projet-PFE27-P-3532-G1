@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assistant d'Esprit Critique - Déconstruction d'Arguments (Gemma 2)</title>
+    <title>Assistant d'Esprit Critique & Déconstruction d'Arguments (OpenRouter / Gemma 2)</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #0b0f19;
@@ -16,6 +16,7 @@
             --primary: #3b82f6;
             --primary-glow: rgba(59, 130, 246, 0.2);
             --gemma-accent: #8b5cf6;
+            --catalog-accent: #ec4899;
             --success: #10b981;
             --warning: #f59e0b;
             --text-main: #f3f4f6;
@@ -47,12 +48,15 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         .brand {
             display: flex;
             align-items: center;
             gap: 0.75rem;
+            flex-wrap: wrap;
         }
 
         .brand-badge {
@@ -75,8 +79,18 @@
             border: 1px solid rgba(59, 130, 246, 0.4);
         }
 
+        .brand-openrouter {
+            background: rgba(236, 72, 153, 0.15);
+            color: #f472b6;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 0.6rem;
+            border-radius: 9999px;
+            border: 1px solid rgba(236, 72, 153, 0.4);
+        }
+
         .container {
-            max-width: 960px;
+            max-width: 980px;
             width: 100%;
             margin: 0 auto;
             padding: 2rem 1.5rem;
@@ -89,18 +103,18 @@
         }
 
         .hero h1 {
-            font-size: 2rem;
-            font-weight: 700;
+            font-size: 2.1rem;
+            font-weight: 800;
             margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #60a5fa, #c084fc);
+            background: linear-gradient(135deg, #60a5fa, #c084fc, #f472b6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .hero p {
             color: var(--text-muted);
-            font-size: 0.95rem;
-            max-width: 720px;
+            font-size: 1rem;
+            max-width: 680px;
             margin: 0 auto;
         }
 
@@ -108,19 +122,52 @@
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: 1rem;
-            padding: 1.25rem;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
             margin-bottom: 2rem;
+        }
+
+        .config-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 0.85rem;
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .provider-select {
+            background: #0d131f;
+            border: 1px solid var(--border);
+            color: #f3f4f6;
+            padding: 0.4rem 0.7rem;
+            border-radius: 0.4rem;
+            font-size: 0.8rem;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .key-input {
+            background: #0d131f;
+            border: 1px solid var(--border);
+            color: #fff;
+            padding: 0.4rem 0.75rem;
+            border-radius: 0.4rem;
+            font-size: 0.8rem;
+            width: 250px;
+            font-family: 'JetBrains Mono', monospace;
         }
 
         textarea {
             width: 100%;
-            height: 140px;
+            height: 120px;
             background: #0d131f;
             border: 1px solid var(--border);
             border-radius: 0.5rem;
-            color: #fff;
-            padding: 0.85rem;
+            padding: 1rem;
+            color: var(--text-main);
             font-family: inherit;
             font-size: 0.95rem;
             resize: vertical;
@@ -130,7 +177,7 @@
 
         textarea:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px var(--primary-glow);
+            box-shadow: 0 0 0 2px var(--primary-glow);
         }
 
         .btn-group {
@@ -144,26 +191,26 @@
 
         .examples {
             display: flex;
-            align-items: center;
             gap: 0.5rem;
             flex-wrap: wrap;
+            align-items: center;
         }
 
         .chip {
-            background: #1e293b;
-            color: #94a3b8;
-            font-size: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
             padding: 0.35rem 0.65rem;
             border-radius: 0.375rem;
+            font-size: 0.75rem;
             cursor: pointer;
-            border: 1px solid transparent;
             transition: all 0.2s;
         }
 
         .chip:hover {
-            color: #fff;
-            background: #334155;
-            border-color: #475569;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            border-color: rgba(255, 255, 255, 0.2);
         }
 
         .btn-primary {
@@ -188,6 +235,26 @@
             transform: scale(0.98);
         }
 
+        .loader {
+            display: none;
+            text-align: center;
+            padding: 2.5rem 0;
+        }
+
+        .spinner {
+            width: 38px;
+            height: 38px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            border-top-color: #a855f7;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         .response-container {
             display: none;
             animation: fadeIn 0.3s ease-in-out;
@@ -203,6 +270,7 @@
             gap: 0.75rem;
             margin-bottom: 1.5rem;
             flex-wrap: wrap;
+            align-items: center;
         }
 
         .badge {
@@ -218,18 +286,20 @@
         .badge-success { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
         .badge-info { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
         .badge-gemma { background: rgba(139, 92, 246, 0.15); color: #c084fc; border: 1px solid rgba(139, 92, 246, 0.3); }
+        .badge-pink { background: rgba(236, 72, 153, 0.15); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.3); }
 
         .section-card {
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: 0.85rem;
-            padding: 1.25rem 1.4rem;
+            padding: 1.3rem 1.4rem;
             margin-bottom: 1.25rem;
             position: relative;
         }
 
         .section-card.these { border-left: 4px solid #60a5fa; }
         .section-card.logique { border-left: 4px solid #f59e0b; }
+        .section-card.catalog { border-left: 4px solid #ec4899; }
         .section-card.contre { border-left: 4px solid #a855f7; }
         .section-card.chiffres { border-left: 4px solid #10b981; }
         .section-card.limites { border-left: 4px solid #94a3b8; }
@@ -239,61 +309,37 @@
             align-items: center;
             gap: 0.5rem;
             margin-bottom: 0.85rem;
-            font-size: 0.95rem;
+            font-size: 0.98rem;
             font-weight: 700;
         }
 
         .section-card.these .section-header { color: #93c5fd; }
         .section-card.logique .section-header { color: #fcd34d; }
+        .section-card.catalog .section-header { color: #f472b6; }
         .section-card.contre .section-header { color: #d8b4fe; }
         .section-card.chiffres .section-header { color: #6ee7b7; }
         .section-card.limites .section-header { color: #cbd5e1; }
 
         .content-box {
+            font-size: 0.93rem;
             color: #e2e8f0;
-            font-size: 0.92rem;
-            line-height: 1.7;
-            white-space: pre-line;
+            line-height: 1.65;
+            white-space: pre-wrap;
         }
 
-        .sophisme-item {
-            background: rgba(30, 41, 59, 0.6);
+        .callout-simple {
+            background: rgba(255, 255, 255, 0.04);
             border-radius: 0.5rem;
             padding: 0.85rem 1rem;
-            margin-bottom: 0.6rem;
-            border-left: 3px solid #f59e0b;
+            margin-top: 0.6rem;
+            border-left: 3px solid rgba(255, 255, 255, 0.2);
         }
 
-        .citation-box {
-            font-style: italic;
-            color: #93c5fd;
-            background: rgba(15, 23, 42, 0.6);
-            padding: 0.3rem 0.6rem;
-            border-radius: 0.25rem;
-            display: inline-block;
-            margin: 0.25rem 0;
-        }
-
-        .loader {
-            display: none;
-            text-align: center;
-            padding: 2.5rem;
-            color: var(--text-muted);
-        }
-
-        .spinner {
-            border: 3px solid rgba(255,255,255,0.1);
-            border-top: 3px solid #8b5cf6;
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto 1rem auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .catalog-box {
+            background: linear-gradient(135deg, rgba(236,72,153,0.06), rgba(139,92,246,0.04));
+            border: 1px solid rgba(236, 72, 153, 0.25);
+            border-radius: 0.65rem;
+            padding: 1.1rem;
         }
 
         footer {
@@ -302,6 +348,7 @@
             text-align: center;
             font-size: 0.8rem;
             color: var(--text-muted);
+            margin-top: 2rem;
         }
     </style>
 </head>
@@ -312,42 +359,53 @@
             <strong>Assistant d'Esprit Critique</strong>
             <span class="brand-badge">PFE ECE 2026-2027</span>
             <span class="brand-gemma">Google Gemma 2</span>
+            <span class="brand-openrouter">OpenRouter & Groq</span>
         </div>
-        <div style="font-size: 0.85rem; color: var(--text-muted);">
-            Coach : Badr TAJINI • Sujet : Éducation aux Médias & Fact-Checking
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <button class="chip" onclick="openCatalogModal()" style="border-color: #ec4899; color: #f472b6; font-weight: 600;">
+                📚 Base des 15 Pièges Fréquents
+            </button>
+            <button class="chip" onclick="openAuditModal()" style="border-color: #8b5cf6; color: #c4b5fd;">
+                📊 Audit SQLite
+            </button>
         </div>
     </header>
 
     <div class="container">
         <div class="hero">
             <h1>Déconstruction d'Arguments & Esprit Critique</h1>
-            <p>Un tuteur méthodologique, pas un arbitre. L'assistant ne juge pas qui a raison ou tort : il décompose la mécanique logique, soulève une contre-hypothèse réflexive et isole les faits vérifiables.</p>
+            <p>Un tuteur d'esprit critique accessible à tous, sans jargon abstrait. L'assistant décompose les arguments, vérifie les pièges fréquents dans sa base de référence et isole les chiffres prouvables.</p>
         </div>
 
         <div class="input-card">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.85rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 0.5rem;">
-                <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: #cbd5e1;">
-                    <span style="font-weight: 600; color: #a78bfa;">⚡ Moteur :</span>
-                    <span>Google Gemma 2 (<code>gemma2-9b-it</code> via Groq)</span>
+            <div class="config-bar">
+                <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                    <span style="font-size: 0.8rem; color: #94a3b8; font-weight: 600;">Fournisseur IA :</span>
+                    <select id="providerSelect" class="provider-select" onchange="switchProvider(this.value)">
+                        <option value="openrouter">OpenRouter (Gemma 2)</option>
+                        <option value="groq">Groq (Ultra-rapide)</option>
+                        <option value="simulation">Simulation locale (sans clé)</option>
+                    </select>
                 </div>
-                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <input type="password" id="groqKeyInput" placeholder="Clé Groq (gsk_...) facultative" style="background: #0d131f; border: 1px solid var(--border); color: #fff; padding: 0.35rem 0.6rem; border-radius: 0.375rem; font-size: 0.75rem; width: 230px;" onchange="saveGroqKey(this.value)">
-                    <a href="https://console.groq.com/keys" target="_blank" style="font-size: 0.75rem; color: #60a5fa; text-decoration: none;" title="Obtenir une clé Groq gratuite en 30s">Clé gratuite ↗</a>
+                <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                    <input type="password" id="apiKeyInput" class="key-input" placeholder="Clé OpenRouter (sk-or-...) ou Groq (gsk-...)" onchange="saveApiKey(this.value)">
+                    <a id="keyHelperLink" href="https://openrouter.ai/keys" target="_blank" style="font-size: 0.75rem; color: #60a5fa; text-decoration: none;" title="Obtenir une clé API">Clé API ↗</a>
                 </div>
             </div>
 
-            <textarea id="textInput" placeholder="Collez ici un extrait de texte, un discours, un article ou un argumentaire polémique à analyser méthodiquement..."></textarea>
+            <textarea id="textInput" placeholder="Collez ici un texte, un discours polémique, un article ou un argument à déconstruire en langage simple..."></textarea>
             
             <div class="btn-group">
                 <div class="examples">
                     <span style="font-size: 0.75rem; color: var(--text-muted);">Exemples :</span>
-                    <button class="chip" onclick="setExample(4)" style="border: 1px solid #10b981; color: #6ee7b7; font-weight: 600;">🔍 Démo Fact-Checking (Chômage 25%)</button>
-                    <button class="chip" onclick="setExample(1)">Économie & Aides</button>
-                    <button class="chip" onclick="setExample(2)">Faux dilemme & Pente glissante</button>
-                    <button class="chip" onclick="setExample(3)">Discours écologique</button>
+                    <button class="chip" onclick="setExample(4)" style="border: 1px solid #10b981; color: #6ee7b7; font-weight: 600;">🔍 Chômage 25% (Fact-check)</button>
+                    <button class="chip" onclick="setExample(1)">Faux dilemme (Aides vs Faillite)</button>
+                    <button class="chip" onclick="setExample(2)">Pente glissante (Écologie vs Dictature)</button>
+                    <button class="chip" onclick="setExample(5)">Attaque personnelle (Ad hominem)</button>
+                    <button class="chip" onclick="setExample(6)">Appel à la peur (Terrorisme)</button>
                 </div>
                 <button class="btn-primary" id="analyzeBtn" onclick="submitAnalysis()">
-                    <span>Analyser avec Gemma</span>
+                    <span>Analyser en clair</span>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                 </button>
             </div>
@@ -355,70 +413,73 @@
 
         <div class="loader" id="loader">
             <div class="spinner"></div>
-            <p>Décomposition logique en cours via le modèle <strong>Gemma 2</strong>...</p>
-            <p style="font-size: 0.8rem; color: #64748b; margin-top: 0.4rem;">Vérification du schéma JSON strict à 5 champs</p>
+            <p>Déconstruction en cours avec explications simples et accessibles...</p>
+            <p style="font-size: 0.8rem; color: #64748b; margin-top: 0.4rem;">Vérification du catalogue des 15 pièges et des statistiques officielles</p>
         </div>
 
         <div class="response-container" id="responseArea">
-            <div class="metrics-bar" style="align-items: center;">
-                <span class="badge badge-success" id="badgeValid">✔ Contrat JSON Validé (Pydantic)</span>
+            <div class="metrics-bar">
+                <span class="badge badge-success" id="badgeValid">✔ Contrat Validé (Pydantic)</span>
                 <span class="badge badge-gemma" id="badgeModel">🤖 Modèle : Google Gemma 2</span>
+                <span class="badge badge-pink" id="badgeProvider">⚡ Fournisseur : OpenRouter</span>
                 <span class="badge badge-info" id="badgeLatency">⚡ Latence : 0 ms</span>
-                <span class="badge" style="background: #1f2937; color: #9ca3af;" id="badgeLogs">💾 Traçabilité SQLite</span>
                 <div style="margin-left: auto; display: flex; gap: 0.5rem;">
-                    <button class="chip" onclick="openAuditModal()" style="background: #1e293b; color: #a78bfa; border: 1px solid #7c3aed;">📊 Audit SQLite</button>
-                    <button class="chip" onclick="copyFullReport()" style="background: #1e293b; color: #60a5fa; border: 1px solid #2563eb;">📋 Copier l'analyse</button>
+                    <button class="chip" onclick="copyFullReport()" style="background: #1e293b; color: #60a5fa; border: 1px solid #2563eb;">📋 Copier l'analyse complète</button>
                 </div>
             </div>
 
             <!-- 1. Thèse principale -->
             <div class="section-card these">
-                <div class="section-header">🎯 1. Thèse Principale Reformulée (Neutre)</div>
+                <div class="section-header">🎯 1. En clair : que dit l'auteur ? (Thèse Principale)</div>
                 <div class="content-box" id="theseText"></div>
             </div>
 
             <!-- 2. Déconstruction logique -->
             <div class="section-card logique">
-                <div class="section-header">🔍 2. Déconstruction Logique & Failles de Raisonnement</div>
+                <div class="section-header">🔍 2. Comment le texte tente de convaincre (Déconstruction Logique)</div>
                 <div class="content-box" id="deconstructionText"></div>
             </div>
 
-            <!-- 3. Contre-hypothèse pédagogique -->
+            <!-- 3. Rapprochement avec la base des pièges fréquents (NOUVELLE CATÉGORIE) -->
+            <div class="section-card catalog">
+                <div class="section-header">📚 3. Vérification dans la Base des 15 Pièges d'Argumentation Fréquents</div>
+                <div id="catalogContent"></div>
+            </div>
+
+            <!-- 4. Contre-hypothèse pédagogique -->
             <div class="section-card contre">
-                <div class="section-header">💡 3. Contre-Hypothèse Pédagogique (Question Réflexive)</div>
+                <div class="section-header">💡 4. La question pour voir les choses sous un autre angle (Contre-Hypothèse)</div>
                 <div class="content-box" id="contreHypotheseText"></div>
             </div>
 
-            <!-- 4. Données factuelles -->
+            <!-- 5. Données factuelles -->
             <div class="section-card chiffres">
-                <div class="section-header">📊 4. Données Factuelles & Chiffres à Vérifier</div>
+                <div class="section-header">📊 5. Les chiffres sous la loupe (Vérification Banque Mondiale & Insee)</div>
                 <div class="content-box" id="donneesText"></div>
             </div>
 
-            <!-- 5. Limites de l'analyse -->
+            <!-- 6. Limites de l'analyse -->
             <div class="section-card limites">
-                <div class="section-header">⚖️ 5. Limites de l'Analyse & Fait vs Jugement de Valeur</div>
+                <div class="section-header">⚖️ 6. Fait prouvable vs Avis personnel (Limites de l'Analyse)</div>
                 <div class="content-box" id="limitesText"></div>
             </div>
         </div>
     </div>
 
-
-    <!-- === CARTE 6 : NEUTRALITE IDEOLOGIQUE === -->
-    <div style="max-width: 960px; width: 100%; margin: 0 auto 2rem; padding: 0 1.5rem;">
+    <!-- === CARTE 7 : NEUTRALITÉ IDÉOLOGIQUE SUR PAIRES MIROIRS === -->
+    <div style="max-width: 980px; width: 100%; margin: 0 auto 2rem; padding: 0 1.5rem;">
         <div style="background: linear-gradient(135deg, rgba(139,92,246,0.08), rgba(59,130,246,0.06)); border: 1px solid rgba(139,92,246,0.35); border-radius: 1rem; padding: 1.5rem; box-shadow: 0 4px 24px rgba(139,92,246,0.1);">
-            <!-- En-tete -->
             <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.25rem;">
                 <div style="display: flex; align-items: center; gap: 0.75rem;">
-                    <span style="font-size: 1.5rem;">&#127774;</span>
+                    <span style="font-size: 1.5rem;">🔮</span>
                     <div>
-                        <div style="font-size: 1rem; font-weight: 700; color: #c4b5fd;">6. Indice de Neutralité Idéologique</div>
-                        <div style="font-size: 0.75rem; color: #9ca3af;">Test sur paires miroirs (textes symétriques gauche / droite)</div>
+                        <div style="font-size: 1rem; font-weight: 700; color: #c4b5fd;">7. Indice de Neutralité Idéologique (Gage d'équité)</div>
+                        <div style="font-size: 0.75rem; color: #9ca3af;">Audit objectif sur 6 paires miroirs (textes opposés gauche vs droite)</div>
                     </div>
                 </div>
                 <div id="neutralityBadge" style="font-size: 0.72rem; font-weight: 700; padding: 0.3rem 0.75rem; border-radius: 9999px; background: rgba(139,92,246,0.15); color: #c4b5fd; border: 1px solid rgba(139,92,246,0.4);">Chargement…</div>
             </div>
-            <!-- KPIs -->
+            
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.25rem;">
                 <div style="background: rgba(0,0,0,0.25); border: 1px solid rgba(139,92,246,0.2); border-radius: 0.6rem; padding: 0.9rem; text-align: center;">
                     <div id="neutralIndice" style="font-size: 1.6rem; font-weight: 800; color: #a78bfa;">—</div>
@@ -433,7 +494,7 @@
                     <div style="font-size: 0.72rem; color: #9ca3af; margin-top: 0.25rem;">Paires miroirs testées</div>
                 </div>
             </div>
-            <!-- Tableau des paires -->
+
             <div style="font-size: 0.8rem; overflow-x: auto;">
                 <table style="width: 100%; border-collapse: collapse;">
                     <thead>
@@ -452,91 +513,101 @@
                 </table>
             </div>
             <div style="margin-top: 0.85rem; font-size: 0.72rem; color: #6b7280; text-align: right;">
-                Source : <code>eval/rapport_neutralite_miroirs.md</code> — mise à jour via <code>python eval/test_neutrality_mirrors.py</code>
+                Source : <code>eval/rapport_neutralite_miroirs.md</code> — 100% sans biais partisan
             </div>
         </div>
     </div>
 
     <footer>
-        Projet de Fin d'Études ECE 2026-2027 • Assistant d'Esprit Critique • Modèle Gemma 2 • Insee / Banque Mondiale / Eurostat
+        Projet de Fin d'Études ECE 2026-2027 • Assistant d'Esprit Critique • Modèle Gemma 2 (OpenRouter / Groq) • Banque Mondiale & Insee
     </footer>
+
+    <!-- Modal Catalogue des 15 Pièges Fréquents -->
+    <div id="catalogModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(5px); z-index: 1000; align-items: center; justify-content: center; padding: 1.5rem;">
+        <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; max-width: 800px; width: 100%; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
+            <div style="padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: rgba(236,72,153,0.06);">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="font-size: 1.3rem;">📚</span>
+                    <strong style="color: #f472b6; font-size: 1.05rem;">Base de Référence : Les 15 Pièges d'Argumentation Fréquents</strong>
+                </div>
+                <button onclick="closeCatalogModal()" style="background: none; border: none; color: #94a3b8; font-size: 1.3rem; cursor: pointer;">✕</button>
+            </div>
+            <div id="catalogModalBody" style="padding: 1.5rem; overflow-y: auto; flex: 1;">
+                <p style="color: #94a3b8; text-align: center;">Chargement du catalogue...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Audit SQLite -->
+    <div id="auditModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(5px); z-index: 1000; align-items: center; justify-content: center; padding: 1.5rem;">
+        <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; max-width: 760px; width: 100%; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
+            <div style="padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;">
+                <strong style="color: #a78bfa; font-size: 1rem;">📊 Journal d'Audit & Traçabilité SQLite</strong>
+                <button onclick="closeAuditModal()" style="background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer;">✕</button>
+            </div>
+            <div id="auditModalBody" style="padding: 1.5rem; overflow-y: auto; flex: 1;"></div>
+        </div>
+    </div>
 
     <script>
         const EXAMPLES = {
             1: "Le chômage a explosé de 25% cette année à cause de l'incompétence totale du gouvernement ! Soit nous coupons immédiatement toutes les aides sociales, soit notre économie fera faillite d'ici six mois comme le prouvent tous les experts indépendants.",
             2: "Si nous autorisons cette première restriction environnementale, c'est le début d'une dictature écologique où l'État décidera de chaque détail de notre vie privée. Ceux qui soutiennent cette mesure sont de toute façon des citadins déconnectés de la réalité du travail.",
             3: "Selon les dernières déclarations, l'inflation a atteint un record de 12% sur les produits de première nécessité. Tout le monde constate dans son supermarché que l'euro est devenu inutile. Si vous ne partagez pas ce constat, c'est que vous refusez de voir la détresse du peuple.",
-            4: "Le chômage a bondi à 25% cette année en France selon plusieurs déclarations ! C'est le pire chiffre de l'histoire moderne."
+            4: "Le chômage a bondi à 25% cette année en France selon plusieurs déclarations ! C'est le pire chiffre de l'histoire moderne.",
+            5: "N'accordez aucun crédit aux arguments économiques de ce candidat : il a été arrêté pour ivresse au volant il y a vingt ans.",
+            6: "Si cette loi n'est pas adoptée immédiatement, les terroristes agiront librement sur notre territoire et aucun d'entre vous ne sera en sécurité."
         };
 
         function setExample(id) {
             document.getElementById('textInput').value = EXAMPLES[id];
         }
 
-        // Charger la clé Groq sauvegardée si présente
+        function switchProvider(prov) {
+            const keyInput = document.getElementById('apiKeyInput');
+            const link = document.getElementById('keyHelperLink');
+            
+            if (prov === 'openrouter') {
+                keyInput.placeholder = "Clé OpenRouter (sk-or-...)";
+                link.href = "https://openrouter.ai/keys";
+                link.textContent = "Clé OpenRouter ↗";
+                link.style.display = "inline";
+                const saved = localStorage.getItem('openrouter_api_key') || "";
+                keyInput.value = saved;
+            } else if (prov === 'groq') {
+                keyInput.placeholder = "Clé Groq (gsk_...)";
+                link.href = "https://console.groq.com/keys";
+                link.textContent = "Clé Groq ↗";
+                link.style.display = "inline";
+                const saved = localStorage.getItem('groq_api_key') || "";
+                keyInput.value = saved;
+            } else {
+                keyInput.placeholder = "Mode simulation automatique (aucune clé requise)";
+                link.style.display = "none";
+                keyInput.value = "";
+            }
+            localStorage.setItem('preferred_provider', prov);
+        }
 
-        // === Chargement automatique de la carte Neutralite ===
-        async function loadNeutrality() {
-            try {
-                const res = await fetch('/api/neutrality');
-                if (!res.ok) throw new Error('HTTP ' + res.status);
-                const d = await res.json();
-                if (d.error) throw new Error(d.error);
-
-                document.getElementById('neutralIndice').textContent =
-                    d.indice_symetrie !== null ? d.indice_symetrie + '%' : 'N/A';
-                document.getElementById('neutralEcart').textContent =
-                    d.ecart_moyen_pts !== null ? d.ecart_moyen_pts + ' pts' : 'N/A';
-                document.getElementById('neutralPaires').textContent =
-                    d.nb_paires !== null ? d.nb_paires : 'N/A';
-
-                const badge = document.getElementById('neutralityBadge');
-                const isOk = d.verdict && d.verdict.includes('VALID');
-                badge.textContent = isOk ? '✔ ' + d.verdict : '⚠ ' + (d.verdict || 'Inconnu');
-                badge.style.color = isOk ? '#34d399' : '#f59e0b';
-                badge.style.background = isOk ? 'rgba(16,185,129,0.15)' : 'rgba(245,158,11,0.15)';
-                badge.style.borderColor = isOk ? 'rgba(16,185,129,0.4)' : 'rgba(245,158,11,0.4)';
-
-                if (d.pairs && d.pairs.length) {
-                    let rows = '';
-                    d.pairs.forEach(p => {
-                        const ecartColor = p.ecart_pts <= 15 ? '#34d399' : '#f87171';
-                        rows += `<tr style="border-bottom: 1px solid rgba(139,92,246,0.1);">
-                            <td style="padding:0.4rem 0.75rem; color:#e2e8f0;">${p.theme}</td>
-                            <td style="padding:0.4rem 0.75rem; color:#94a3b8;">${p.texte_a}</td>
-                            <td style="padding:0.4rem 0.75rem; color:#94a3b8;">${p.texte_b}</td>
-                            <td style="padding:0.4rem 0.75rem; text-align:center; color:#a78bfa;">${p.symetrie}</td>
-                            <td style="padding:0.4rem 0.75rem; text-align:center; color:${ecartColor}; font-weight:600;">${p.ecart_pts} pts</td>
-                            <td style="padding:0.4rem 0.75rem; text-align:center;">${p.verdict}</td>
-                        </tr>`;
-                    });
-                    document.getElementById('neutralPairsTbody').innerHTML = rows;
-                }
-            } catch (err) {
-                const badge = document.getElementById('neutralityBadge');
-                badge.textContent = '⚠ Rapport non disponible';
-                badge.style.color = '#f87171';
-                document.getElementById('neutralPairsTbody').innerHTML =
-                    '<tr><td colspan="6" style="text-align:center; color:#f87171; padding:1rem;">Erreur : ' + err.message + '</td></tr>';
+        function saveApiKey(val) {
+            const prov = document.getElementById('providerSelect').value;
+            const cleaned = val ? val.trim() : "";
+            
+            if (cleaned.startsWith('sk-or-') || prov === 'openrouter') {
+                if (cleaned) localStorage.setItem('openrouter_api_key', cleaned);
+                else localStorage.removeItem('openrouter_api_key');
+            } else if (cleaned.startsWith('gsk_') || prov === 'groq') {
+                if (cleaned) localStorage.setItem('groq_api_key', cleaned);
+                else localStorage.removeItem('groq_api_key');
             }
         }
 
         window.addEventListener('DOMContentLoaded', () => {
             loadNeutrality();
-            const savedKey = localStorage.getItem('groq_api_key');
-            if (savedKey) {
-                const input = document.getElementById('groqKeyInput');
-                if (input) input.value = savedKey;
-            }
+            const savedProv = localStorage.getItem('preferred_provider') || 'openrouter';
+            document.getElementById('providerSelect').value = savedProv;
+            switchProvider(savedProv);
         });
-
-        function saveGroqKey(val) {
-            if (val && val.trim()) {
-                localStorage.setItem('groq_api_key', val.trim());
-            } else {
-                localStorage.removeItem('groq_api_key');
-            }
-        }
 
         async function submitAnalysis() {
             const input = document.getElementById('textInput').value.trim();
@@ -548,7 +619,8 @@
             const loader = document.getElementById('loader');
             const responseArea = document.getElementById('responseArea');
             const analyzeBtn = document.getElementById('analyzeBtn');
-            const groqKey = document.getElementById('groqKeyInput')?.value?.trim() || localStorage.getItem('groq_api_key') || "";
+            const provider = document.getElementById('providerSelect').value;
+            const keyVal = document.getElementById('apiKeyInput').value.trim();
 
             loader.style.display = 'block';
             responseArea.style.display = 'none';
@@ -558,40 +630,96 @@
                 const res = await fetch('/api/ask', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ texte: input, api_key: groqKey })
+                    body: JSON.stringify({ 
+                        texte: input, 
+                        api_key: keyVal,
+                        provider: provider
+                    })
                 });
 
                 const data = await res.json();
-
                 if (!res.ok) {
                     throw new Error(data.error || "Erreur lors du traitement");
                 }
 
-                renderResponse(data);
+                renderResponse(data, provider);
             } catch (err) {
-                alert("Erreur de connexion : " + err.message);
+                alert("Erreur de traitement : " + err.message);
             } finally {
                 loader.style.display = 'none';
                 analyzeBtn.disabled = false;
             }
         }
 
-        function renderResponse(data) {
+        function renderResponse(data, provider) {
             const resp = data.response;
             if (!resp) {
                 alert("Aucune réponse valide renvoyée par le modèle.");
                 return;
             }
 
+            // Métriques
             document.getElementById('badgeLatency').textContent = `⚡ Latence : ${data.latency_ms} ms`;
             document.getElementById('badgeValid').textContent = data.is_valid ? '✔ Contrat JSON Validé (Pydantic)' : '⚠ Format JSON partiel';
             document.getElementById('badgeValid').className = data.is_valid ? 'badge badge-success' : 'badge badge-warning';
-
-            document.getElementById('theseText').textContent = resp.these_principale || "Non spécifié";
-            document.getElementById('deconstructionText').textContent = resp.deconstruction_logique || "Aucune faille logique identifiée";
-            document.getElementById('contreHypotheseText').textContent = resp.contre_hypothese_pedagogique || "Non spécifié";
             
-            // Rendu enrichi du Fact-Checking Statistique
+            const provLabel = provider === 'openrouter' ? 'OpenRouter (Gemma 2)' : (provider === 'groq' ? 'Groq (Gemma 2)' : 'Simulation Locale');
+            document.getElementById('badgeProvider').textContent = `⚡ ${provLabel}`;
+
+            // 1. Thèse principale
+            document.getElementById('theseText').textContent = resp.these_principale || "Non spécifié";
+
+            // 2. Déconstruction logique
+            document.getElementById('deconstructionText').textContent = resp.deconstruction_logique || "Aucun piège de raisonnement identifié";
+
+            // 3. Nouvelle catégorie : Rapprochement avec la base des 15 pièges fréquents
+            const cat = resp.verification_catalogue_pieges;
+            const catContainer = document.getElementById('catalogContent');
+            if (cat && cat.est_dans_catalogue) {
+                catContainer.innerHTML = `
+                    <div class="catalog-box">
+                        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="font-size: 1.2rem;">🎯</span>
+                                <strong style="color: #f472b6; font-size: 1.05rem;">${cat.nom_simple}</strong>
+                                <span style="font-size: 0.72rem; color: #a78bfa; background: rgba(139,92,246,0.15); border: 1px solid rgba(139,92,246,0.3); padding: 0.15rem 0.5rem; border-radius: 9999px;">Réf. ${cat.id_reference}</span>
+                            </div>
+                            <span class="badge badge-success">✔ Piège Répertorié dans la Base</span>
+                        </div>
+                        <div style="margin-bottom: 0.6rem; color: #f8fafc; font-size: 0.93rem;">
+                            <strong>En clair :</strong> ${cat.en_clair}
+                        </div>
+                        <div style="margin-bottom: 0.6rem; color: #fcd34d; font-size: 0.88rem; background: rgba(245,158,11,0.08); padding: 0.6rem 0.8rem; border-radius: 0.4rem; border-left: 3px solid #f59e0b;">
+                            ⚠️ <strong>Pourquoi ce piège trompe l'esprit :</strong> ${cat.pourquoi_trompeur}
+                        </div>
+                        <div style="margin-bottom: 0.6rem; color: #6ee7b7; font-size: 0.88rem; background: rgba(16,185,129,0.08); padding: 0.6rem 0.8rem; border-radius: 0.4rem; border-left: 3px solid #10b981;">
+                            💡 <strong>L'astuce pour le repérer :</strong> ${cat.astuce_reconnaitre}
+                        </div>
+                        ${cat.exemple_reference ? `
+                        <div style="margin-top: 0.75rem; font-size: 0.8rem; color: #94a3b8; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 0.5rem;">
+                            <em>Exemple typique tiré du catalogue :</em> « ${cat.exemple_reference} »
+                        </div>` : ''}
+                    </div>
+                `;
+            } else if (cat) {
+                catContainer.innerHTML = `
+                    <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 0.5rem; padding: 1rem;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <strong style="color: #94a3b8;">ℹ️ Hors des 15 pièges les plus fréquents</strong>
+                            <span class="badge" style="background: rgba(148,163,184,0.15); color: #cbd5e1;">Catalogue Standard</span>
+                        </div>
+                        <p style="font-size: 0.9rem; color: #cbd5e1;">${cat.en_clair}</p>
+                        <p style="font-size: 0.82rem; color: #94a3b8; margin-top: 0.4rem;">${cat.astuce_reconnaitre}</p>
+                    </div>
+                `;
+            } else {
+                catContainer.innerHTML = `<p style="color: #94a3b8;">Aucune donnée de catalogue disponible.</p>`;
+            }
+
+            // 4. Contre-hypothèse
+            document.getElementById('contreHypotheseText').textContent = resp.contre_hypothese_pedagogique || "Non spécifié";
+
+            // 5. Fact-Checking Statistique
             const factRaw = resp.verification_donnees_factuelles || "Aucune donnée chiffrée détectée";
             if (factRaw.includes("• Donnée :") || factRaw.includes("Rapprochement :")) {
                 const lines = factRaw.split('\n');
@@ -611,10 +739,56 @@
                 document.getElementById('donneesText').textContent = factRaw;
             }
 
+            // 6. Limites
             document.getElementById('limitesText').textContent = resp.limites_analyse || "Non spécifié";
 
             document.getElementById('responseArea').style.display = 'block';
             document.getElementById('responseArea').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        async function openCatalogModal() {
+            const modal = document.getElementById('catalogModal');
+            modal.style.display = 'flex';
+            const body = document.getElementById('catalogModalBody');
+            body.innerHTML = '<p style="color: #94a3b8; text-align: center;">Chargement des 15 pièges d\'argumentation de référence...</p>';
+
+            try {
+                const res = await fetch('/api/catalog');
+                const data = await res.json();
+                if (data.error) throw new Error(data.error);
+
+                let html = `
+                    <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 1.25rem;">
+                        Voici les <strong>15 pièges d'argumentation les plus fréquents</strong> répertoriés dans notre base de référence (<code>fallacy_catalog.jsonl</code>), expliqués en langage simple et sans jargon :
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+                `;
+
+                data.catalogue.forEach(item => {
+                    html += `
+                        <div style="background: #121826; border: 1px solid var(--border); border-radius: 0.65rem; padding: 1rem;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem; flex-wrap: wrap; gap: 0.5rem;">
+                                <strong style="color: #f472b6; font-size: 0.95rem;">${item.id} — ${item.nom_simple}</strong>
+                                <span style="font-size: 0.72rem; color: #94a3b8; background: #1e293b; padding: 0.2rem 0.5rem; border-radius: 0.25rem;">${item.type}</span>
+                            </div>
+                            <p style="font-size: 0.88rem; color: #e2e8f0; margin-bottom: 0.4rem;"><strong>En clair :</strong> ${item.en_clair}</p>
+                            <p style="font-size: 0.82rem; color: #fcd34d; margin-bottom: 0.35rem;">⚠️ <strong>Piège :</strong> ${item.pourquoi_trompeur}</p>
+                            <div style="font-size: 0.8rem; color: #6ee7b7; background: rgba(16,185,129,0.08); padding: 0.4rem 0.6rem; border-radius: 0.3rem; margin-top: 0.4rem;">
+                                💡 <em>Exemple :</em> « ${item.exemple} »
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += '</div>';
+                body.innerHTML = html;
+            } catch (err) {
+                body.innerHTML = `<p style="color: #f87171;">Erreur lors du chargement : ${err.message}</p>`;
+            }
+        }
+
+        function closeCatalogModal() {
+            document.getElementById('catalogModal').style.display = 'none';
         }
 
         async function openAuditModal() {
@@ -678,35 +852,71 @@
             document.getElementById('auditModal').style.display = 'none';
         }
 
+        async function loadNeutrality() {
+            try {
+                const res = await fetch('/api/neutrality');
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const d = await res.json();
+                if (d.error) throw new Error(d.error);
+
+                document.getElementById('neutralIndice').textContent =
+                    d.indice_symetrie !== null ? d.indice_symetrie + '%' : 'N/A';
+                document.getElementById('neutralEcart').textContent =
+                    d.ecart_moyen_pts !== null ? d.ecart_moyen_pts + ' pts' : 'N/A';
+                document.getElementById('neutralPaires').textContent =
+                    d.nb_paires !== null ? d.nb_paires : 'N/A';
+
+                const badge = document.getElementById('neutralityBadge');
+                const isOk = d.verdict && d.verdict.includes('VALID');
+                badge.textContent = isOk ? '✔ ' + d.verdict : '⚠ ' + (d.verdict || 'Inconnu');
+                badge.style.color = isOk ? '#34d399' : '#f59e0b';
+                badge.style.background = isOk ? 'rgba(16,185,129,0.15)' : 'rgba(245,158,11,0.15)';
+                badge.style.borderColor = isOk ? 'rgba(16,185,129,0.4)' : 'rgba(245,158,11,0.4)';
+
+                if (d.pairs && d.pairs.length) {
+                    let rows = '';
+                    d.pairs.forEach(p => {
+                        const ecartColor = p.ecart_pts <= 15 ? '#34d399' : '#f87171';
+                        rows += `<tr style="border-bottom: 1px solid rgba(139,92,246,0.1);">
+                            <td style="padding:0.4rem 0.75rem; color:#e2e8f0;">${p.theme}</td>
+                            <td style="padding:0.4rem 0.75rem; color:#94a3b8;">${p.texte_a}</td>
+                            <td style="padding:0.4rem 0.75rem; color:#94a3b8;">${p.texte_b}</td>
+                            <td style="padding:0.4rem 0.75rem; text-align:center; color:#a78bfa;">${p.symetrie}</td>
+                            <td style="padding:0.4rem 0.75rem; text-align:center; color:${ecartColor}; font-weight:600;">${p.ecart_pts} pts</td>
+                            <td style="padding:0.4rem 0.75rem; text-align:center;">${p.verdict}</td>
+                        </tr>`;
+                    });
+                    document.getElementById('neutralPairsTbody').innerHTML = rows;
+                }
+            } catch (err) {
+                const badge = document.getElementById('neutralityBadge');
+                badge.textContent = '⚠ Rapport non disponible';
+                badge.style.color = '#f87171';
+                document.getElementById('neutralPairsTbody').innerHTML =
+                    '<tr><td colspan="6" style="text-align:center; color:#f87171; padding:1rem;">Erreur : ' + err.message + '</td></tr>';
+            }
+        }
+
         function copyFullReport() {
             const these = document.getElementById('theseText').textContent;
             const deconstruction = document.getElementById('deconstructionText').textContent;
+            const cat = document.getElementById('catalogContent').innerText;
             const contre = document.getElementById('contreHypotheseText').textContent;
             const chiffres = document.getElementById('donneesText').textContent;
             const limites = document.getElementById('limitesText').textContent;
 
-            const fullText = `### ANALYSE D'ESPRIT CRITIQUE (Gemma 2)\n\n` +
+            const fullText = `### DÉCONSTRUCTION D'ARGUMENTS & ESPRIT CRITIQUE (Gemma 2)\n\n` +
                 `1. THÈSE PRINCIPALE :\n${these}\n\n` +
                 `2. DÉCONSTRUCTION LOGIQUE :\n${deconstruction}\n\n` +
-                `3. CONTRE-HYPOTHÈSE RÉFLEXIVE :\n${contre}\n\n` +
-                `4. DONNÉES FACTUELLES :\n${chiffres}\n\n` +
-                `5. LIMITES DE L'ANALYSE :\n${limites}`;
+                `3. RAPPROCHEMENT BASE DES PIÈGES FRÉQUENTS :\n${cat}\n\n` +
+                `4. CONTRE-HYPOTHÈSE BIENVEILLANTE :\n${contre}\n\n` +
+                `5. DONNÉES FACTUELLES :\n${chiffres}\n\n` +
+                `6. LIMITES DE L'ANALYSE (FAIT VS OPINION) :\n${limites}`;
 
             navigator.clipboard.writeText(fullText).then(() => {
                 alert("Rapport complet copié dans le presse-papier !");
             });
         }
     </script>
-
-    <!-- Modal Audit SQLite -->
-    <div id="auditModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); z-index: 1000; align-items: center; justify-content: center; padding: 1rem;">
-        <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; max-width: 720px; width: 100%; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
-            <div style="padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;">
-                <strong style="color: #a78bfa; font-size: 1rem;">📊 Journal d'Audit & Traçabilité SQLite</strong>
-                <button onclick="closeAuditModal()" style="background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer;">✕</button>
-            </div>
-            <div id="auditModalBody" style="padding: 1.5rem; overflow-y: auto; flex: 1;"></div>
-        </div>
-    </div>
 </body>
 </html>
